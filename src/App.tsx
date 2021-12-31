@@ -9,10 +9,12 @@ function App() {
   document.documentElement.className = "theme-light";
 
   return (
-    <Container>
-      <Toolbar />
-      <Outlet />
-    </Container>
+    <div className="App">
+      <Container>
+        <Toolbar />
+        <Outlet />
+      </Container>
+    </div>
   );
 }
 

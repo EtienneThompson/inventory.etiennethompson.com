@@ -1,15 +1,18 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import "./index.scss";
 import App from "./App";
+import { Login } from "./pages/Login";
 import reportWebVitals from "./reportWebVitals";
+import "./index.scss";
 
 ReactDOM.render(
   <React.StrictMode>
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<App />} />
+        <Route path="/" element={<App />}>
+          <Route path="login" element={<Login />} />
+        </Route>
       </Routes>
     </BrowserRouter>
   </React.StrictMode>,
