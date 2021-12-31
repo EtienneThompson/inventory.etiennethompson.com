@@ -1,5 +1,10 @@
 import { AnyAction } from "redux";
 import { store } from "../store";
+import {
+  writeToLocalStorage,
+  deleteFromLocalStorage,
+} from "../../utils/localStorage";
+import { LocalStorageKey } from "../../types";
 
 export const setIsLoading = (status: boolean): AnyAction => {
   return {
@@ -41,15 +46,21 @@ export const login = (
   isUser: boolean,
   isAdmin: boolean
 ): AnyAction => {
+  writeToLocalStorage(LocalStorageKey.ClientId, clientId);
   store.dispatch(updateClientId(clientId));
+  writeToLocalStorage(LocalStorageKey.IsUser, isUser);
   store.dispatch(updateIsUser(isUser));
+  writeToLocalStorage(LocalStorageKey.IsAdmin, isAdmin);
   store.dispatch(updateIsAdmin(isAdmin));
   return setLoginStatus(true);
 };
 
 export const logout = (): AnyAction => {
+  deleteFromLocalStorage(LocalStorageKey.ClientId);
   store.dispatch(updateClientId(undefined));
+  deleteFromLocalStorage(LocalStorageKey.IsUser);
   store.dispatch(updateIsUser(false));
+  deleteFromLocalStorage(LocalStorageKey.IsAdmin);
   store.dispatch(updateIsAdmin(false));
   return setLoginStatus(false);
 };

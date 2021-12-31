@@ -1,11 +1,15 @@
+import { FunctionComponent } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { ToolbarProps } from "./Toolbar.types";
 import { InventoryStore } from "../../../store/types";
 import { Button } from "../Button";
 import { Row, Col } from "../Grid";
 import { logout } from "../../../store/actions";
 import "./Toolbar.scss";
 
-export const Toolbar = () => {
+export const Toolbar: FunctionComponent<ToolbarProps> = (
+  props: ToolbarProps
+) => {
   const dispatch = useDispatch();
   const isLoggedIn = useSelector((state: InventoryStore) => state.isLoggedIn);
 
@@ -16,10 +20,6 @@ export const Toolbar = () => {
     );
   };
 
-  const onLogoutButtonClicked = () => {
-    dispatch(logout());
-  };
-
   return (
     <div className="toolbar-container">
       <Row>
@@ -28,7 +28,7 @@ export const Toolbar = () => {
         </Col>
         <Col cols={2} align="end">
           {isLoggedIn ? (
-            <Button onClick={onLogoutButtonClicked}>Logout</Button>
+            <Button onClick={props.onLogoutButtonClicked}>Logout</Button>
           ) : (
             <Button onClick={onLoginButtonClicked}>Login</Button>
           )}
