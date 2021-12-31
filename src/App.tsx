@@ -1,5 +1,6 @@
 import React from "react";
 import { Outlet } from "react-router-dom";
+import { Container } from "./components/common/Grid";
 import { Toolbar } from "./components/common/Toolbar";
 import "./App.scss";
 
@@ -8,10 +9,10 @@ function App() {
   document.documentElement.className = "theme-light";
 
   return (
-    <div className="App">
+    <Container>
       <Toolbar />
       <Outlet />
-    </div>
+    </Container>
   );
 }
 
