@@ -1,12 +1,14 @@
-import { useDispatch, useSelector } from "react-redux";
+import { FunctionComponent } from "react";
+import { useSelector } from "react-redux";
+import { ToolbarProps } from "./Toolbar.types";
 import { InventoryStore } from "../../../store/types";
 import { Button } from "../Button";
 import { Row, Col } from "../Grid";
-import { logout } from "../../../store/actions";
 import "./Toolbar.scss";
 
-export const Toolbar = () => {
-  const dispatch = useDispatch();
+export const Toolbar: FunctionComponent<ToolbarProps> = (
+  props: ToolbarProps
+) => {
   const isLoggedIn = useSelector((state: InventoryStore) => state.isLoggedIn);
 
   const onLoginButtonClicked = () => {
@@ -14,10 +16,6 @@ export const Toolbar = () => {
       `${process.env.REACT_APP_LOGIN_ENDPOINT}/login?appid=${process.env.REACT_APP_APPLICATION_ID}&redirectBase=${process.env.REACT_APP_LOGIN_REDIRECT}`,
       "_self"
     );
-  };
-
-  const onLogoutButtonClicked = () => {
-    dispatch(logout());
   };
 
   return (
@@ -28,7 +26,7 @@ export const Toolbar = () => {
         </Col>
         <Col cols={2} align="end">
           {isLoggedIn ? (
-            <Button onClick={onLogoutButtonClicked}>Logout</Button>
+            <Button onClick={props.onLogoutButtonClicked}>Logout</Button>
           ) : (
             <Button onClick={onLoginButtonClicked}>Login</Button>
           )}
