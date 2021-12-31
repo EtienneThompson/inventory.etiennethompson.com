@@ -1,16 +1,14 @@
 import { FunctionComponent } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { ToolbarProps } from "./Toolbar.types";
 import { InventoryStore } from "../../../store/types";
 import { Button } from "../Button";
 import { Row, Col } from "../Grid";
-import { logout } from "../../../store/actions";
 import "./Toolbar.scss";
 
 export const Toolbar: FunctionComponent<ToolbarProps> = (
   props: ToolbarProps
 ) => {
-  const dispatch = useDispatch();
   const isLoggedIn = useSelector((state: InventoryStore) => state.isLoggedIn);
 
   const onLoginButtonClicked = () => {

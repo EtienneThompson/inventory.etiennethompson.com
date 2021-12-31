@@ -4,10 +4,10 @@ import { useNavigate } from "react-router";
 import { Outlet } from "react-router-dom";
 import { Container } from "./components/common/Grid";
 import { Toolbar } from "./components/common/Toolbar";
-import "./App.scss";
 import { readFromLocalStorage } from "./utils/localStorage";
 import { LocalStorageKey } from "./types";
 import { login, logout } from "./store/actions";
+import "./App.scss";
 
 function App() {
   document.title = "Etienne Thompson - Inventory System";
