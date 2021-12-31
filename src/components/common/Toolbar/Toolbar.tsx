@@ -1,11 +1,18 @@
 import { Button } from "../Button";
+import { Row, Col } from "../Grid";
 import "./Toolbar.scss";
 
 export const Toolbar = () => {
   return (
     <div className="toolbar-container">
-      <div className="title">Etienne Thompson Inventory</div>
-      <Button>Login</Button>
+      <Row>
+        <Col cols={2} align="start">
+          <div className="title">Etienne Thompson Inventory</div>
+        </Col>
+        <Col cols={2} align="end">
+          <Button>Login</Button>
+        </Col>
+      </Row>
     </div>
   );
 };
