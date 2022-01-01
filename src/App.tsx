@@ -27,7 +27,7 @@ function App() {
 
   const onLogoutButtonClicked = () => {
     dispatch(logout());
-    navigate("/");
+    navigate("/logout?reason=0");
   };
 
   return (
