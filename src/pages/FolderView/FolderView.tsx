@@ -59,14 +59,20 @@ export const FolderView = () => {
           <Row>
             <Col>
               {folder.children.map((child, index) => (
-                <Row key={`${child.id}+${index}`}>
-                  {child.type === "folder" ? (
-                    <AiFillFolder />
-                  ) : (
-                    <AiFillInfoCircle />
-                  )}
-                  <p className="details">Name: {child.name}</p>
-                  <div>Picture: {child.picture}</div>
+                <Row className="folder-child" key={`${child.id}+${index}`}>
+                  <Col cols={1}>
+                    <Row className="folder-child-name" justify="start">
+                      {child.type === "folder" ? (
+                        <AiFillFolder />
+                      ) : (
+                        <AiFillInfoCircle />
+                      )}
+                      <p className="details">{child.name}</p>
+                    </Row>
+                  </Col>
+                  <Col cols={4}>
+                    <div>Picture: {child.picture}</div>
+                  </Col>
                 </Row>
               ))}
             </Col>
