@@ -6,6 +6,7 @@ import App from "./App";
 import { LandingPage } from "./pages/LandingPage";
 import { Login } from "./pages/Login";
 import { Logout } from "./pages/Logout";
+import { ItemView } from "./pages/ItemView";
 import reportWebVitals from "./reportWebVitals";
 import { store } from "./store/store";
 import "./index.scss";
@@ -18,6 +19,7 @@ ReactDOM.render(
           <Route path="" element={<LandingPage />} />
           <Route path="login" element={<Login />} />
           <Route path="logout" element={<Logout />} />
+          <Route path="item/:itemid" element={<ItemView />} />
         </Route>
       </Routes>
     </BrowserRouter>
