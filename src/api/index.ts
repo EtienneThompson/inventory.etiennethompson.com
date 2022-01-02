@@ -45,6 +45,8 @@ instance.interceptors.response.use(
     ) {
       store.dispatch(logout());
       return (window.location.href = "/logout?reason=1");
+    } else if (err.response.status === 401) {
+      return (window.location.href = "/logout?reason=0");
     }
     return Promise.reject(err);
   }
