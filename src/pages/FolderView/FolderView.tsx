@@ -1,6 +1,8 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router";
+import { useNavigate } from "react-router";
+import { Button } from "../../components/common/Button";
 import { Container, Row, Col } from "../../components/common/Grid";
 import { LoadingSpinner } from "../../components/common/LoadingSpinner";
 import { AiFillFolder, AiFillInfoCircle } from "react-icons/ai";
@@ -12,6 +14,7 @@ import "./FolderView.scss";
 
 export const FolderView = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const params = useParams();
 
   const [folder, setFolder] = React.useState<FolderDetails | undefined>(
@@ -37,7 +40,14 @@ export const FolderView = () => {
 
   return (
     <Container className="folder-view-container">
-      <h1>Folder #{params.folderid}</h1>
+      <Row>
+        {folder && folder.parent_folder && (
+          <Button onClick={() => navigate(`/folder/${folder?.parent_folder}`)}>
+            Back
+          </Button>
+        )}
+        <h2>Folder #{params.folderid}</h2>
+      </Row>
       {isLoading && <LoadingSpinner />}
       {!isLoading && folder && (
         <Col>
@@ -59,7 +69,15 @@ export const FolderView = () => {
           <Row>
             <Col>
               {folder.children.map((child, index) => (
-                <Row className="folder-child" key={`${child.id}+${index}`}>
+                <Row
+                  className="folder-child"
+                  key={`${child.id}+${index}`}
+                  onClick={() => {
+                    navigate(`/${child.type}/${child.id}`, {
+                      state: params.folderid,
+                    });
+                  }}
+                >
                   <Col cols={1}>
                     <Row className="folder-child-name" justify="start">
                       {child.type === "folder" ? (

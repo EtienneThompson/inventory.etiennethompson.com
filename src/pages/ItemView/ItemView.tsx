@@ -1,5 +1,6 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router";
 import { useParams } from "react-router-dom";
 import { Container, Row, Col } from "../../components/common/Grid";
 import api from "../../api";
@@ -8,9 +9,11 @@ import { InventoryStore } from "../../store/types";
 import { LoadingSpinner } from "../../components/common/LoadingSpinner";
 import { ItemDetails } from "./ItemView.types";
 import "./ItemView.scss";
+import { Button } from "../../components/common/Button";
 
 export const ItemView = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const params = useParams();
 
   const [item, setItem] = React.useState<ItemDetails | undefined>(undefined);
@@ -34,7 +37,14 @@ export const ItemView = () => {
 
   return (
     <Container>
-      <h1>Item #{params.itemid}</h1>
+      <Row>
+        {item && item.parent_folder && (
+          <Button onClick={() => navigate(`/folder/${item.parent_folder}`)}>
+            Back
+          </Button>
+        )}
+        <h2>Item #{params.itemid}</h2>
+      </Row>
       {isLoading && <LoadingSpinner />}
       {!isLoading && item && (
         <Row>

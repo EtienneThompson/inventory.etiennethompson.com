@@ -15,7 +15,11 @@ export const Row: FunctionComponent<RowProps> = (props: RowProps) => {
   };
 
   return (
-    <div className={`row-container ${props.className}`} style={propStyles()}>
+    <div
+      className={`row-container ${props.className}`}
+      style={propStyles()}
+      onClick={() => props.onClick && props.onClick()}
+    >
       {props.children}
     </div>
   );
