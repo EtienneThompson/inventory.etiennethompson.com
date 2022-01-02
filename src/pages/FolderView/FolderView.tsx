@@ -2,6 +2,7 @@ import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router";
 import { useNavigate } from "react-router";
+import { Button } from "../../components/common/Button";
 import { Container, Row, Col } from "../../components/common/Grid";
 import { LoadingSpinner } from "../../components/common/LoadingSpinner";
 import { AiFillFolder, AiFillInfoCircle } from "react-icons/ai";
@@ -39,7 +40,14 @@ export const FolderView = () => {
 
   return (
     <Container className="folder-view-container">
-      <h1>Folder #{params.folderid}</h1>
+      <Row>
+        {folder && folder.parent_folder && (
+          <Button onClick={() => navigate(`/folder/${folder?.parent_folder}`)}>
+            Back
+          </Button>
+        )}
+        <h2>Folder #{params.folderid}</h2>
+      </Row>
       {isLoading && <LoadingSpinner />}
       {!isLoading && folder && (
         <Col>
@@ -65,7 +73,9 @@ export const FolderView = () => {
                   className="folder-child"
                   key={`${child.id}+${index}`}
                   onClick={() => {
-                    navigate(`/${child.type}/${child.id}`);
+                    navigate(`/${child.type}/${child.id}`, {
+                      state: params.folderid,
+                    });
                   }}
                 >
                   <Col cols={1}>

@@ -3,6 +3,7 @@ export interface FolderDetails {
   name: string;
   picture: string;
   description: string;
+  parent_folder: string;
   created: string;
   modified: string;
   children: ChildDetails[];
