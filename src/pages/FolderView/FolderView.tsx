@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router";
 import { Container, Row, Col } from "../../components/common/Grid";
 import { LoadingSpinner } from "../../components/common/LoadingSpinner";
+import { AiFillFolder, AiFillInfoCircle } from "react-icons/ai";
 import { setIsLoading } from "../../store/actions";
 import { InventoryStore } from "../../store/types";
 import { FolderDetails } from "./FolderView.types";
@@ -59,6 +60,11 @@ export const FolderView = () => {
             <Col>
               {folder.children.map((child, index) => (
                 <Row key={`${child.id}+${index}`}>
+                  {child.type === "folder" ? (
+                    <AiFillFolder />
+                  ) : (
+                    <AiFillInfoCircle />
+                  )}
                   <p className="details">Name: {child.name}</p>
                   <div>Picture: {child.picture}</div>
                 </Row>
