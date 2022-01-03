@@ -5,6 +5,7 @@ import { useNavigate } from "react-router";
 import { Button } from "../../components/common/Button";
 import { Container, Row, Col } from "../../components/common/Grid";
 import { LoadingSpinner } from "../../components/common/LoadingSpinner";
+import { ElementDetails } from "../../components/ElementDetails/ElementDetails";
 import { AiFillFolder, AiFillInfoCircle } from "react-icons/ai";
 import { setIsLoading } from "../../store/actions";
 import { InventoryStore } from "../../store/types";
@@ -51,21 +52,7 @@ export const FolderView = () => {
       {isLoading && <LoadingSpinner />}
       {!isLoading && folder && (
         <Col>
-          <Row>
-            <Col align="start" cols={1}>
-              <p className="details">Name: {folder.name}</p>
-              <p className="details">Description: {folder.name}</p>
-            </Col>
-            <Col cols={4}>
-              <div>Picture: {folder.picture}</div>
-            </Col>
-          </Row>
-          <Row>
-            <Col align="start">
-              <p className="item-time">Created: {folder.created}</p>
-              <p className="item-time">Updated: {folder.modified}</p>
-            </Col>
-          </Row>
+          <ElementDetails element={folder} />
           <Row>
             <Col>
               {folder.children.map((child, index) => (

@@ -2,11 +2,12 @@ import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router";
 import { useParams } from "react-router-dom";
-import { Container, Row, Col } from "../../components/common/Grid";
+import { Container, Row } from "../../components/common/Grid";
 import api from "../../api";
 import { setIsLoading } from "../../store/actions";
 import { InventoryStore } from "../../store/types";
 import { LoadingSpinner } from "../../components/common/LoadingSpinner";
+import { ElementDetails } from "../../components/ElementDetails/ElementDetails";
 import { ItemDetails } from "./ItemView.types";
 import "./ItemView.scss";
 import { Button } from "../../components/common/Button";
@@ -46,27 +47,7 @@ export const ItemView = () => {
         <h2>Item #{params.itemid}</h2>
       </Row>
       {isLoading && <LoadingSpinner />}
-      {!isLoading && item && (
-        <Row>
-          <Col>
-            <Row>
-              <Col align="start" cols={1}>
-                <p className="details">Name: {item.name}</p>
-                <p className="details">Description: {item.description}</p>
-              </Col>
-              <Col cols={4}>
-                <div>Picture: {item.picture}</div>
-              </Col>
-            </Row>
-            <Row>
-              <Col align="start">
-                <p className="item-time">Created: {item.created}</p>
-                <p className="item-time">Updated: {item.updated}</p>
-              </Col>
-            </Row>
-          </Col>
-        </Row>
-      )}
+      {!isLoading && item && <ElementDetails element={item} />}
     </Container>
   );
 };
