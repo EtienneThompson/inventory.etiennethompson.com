@@ -5,7 +5,7 @@ export interface FolderDetails {
   description: string;
   parent_folder: string;
   created: string;
-  modified: string;
+  updated: string;
   children: ChildDetails[];
 }
 
