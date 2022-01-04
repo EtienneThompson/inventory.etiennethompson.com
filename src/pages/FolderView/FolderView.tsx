@@ -5,7 +5,8 @@ import { useNavigate } from "react-router";
 import { Button } from "../../components/common/Button";
 import { Container, Row, Col } from "../../components/common/Grid";
 import { LoadingSpinner } from "../../components/common/LoadingSpinner";
-import { ElementDetails } from "../../components/ElementDetails/ElementDetails";
+import { ElementDetails } from "../../components/ElementDetails";
+import { NewElementEditor } from "../../components/NewElementEditor";
 import { AiFillFolder, AiFillInfoCircle } from "react-icons/ai";
 import { setIsLoading } from "../../store/actions";
 import { InventoryStore } from "../../store/types";
@@ -21,6 +22,7 @@ export const FolderView = () => {
   const [folder, setFolder] = React.useState<FolderDetails | undefined>(
     undefined
   );
+  const [addNew, setAddNew] = React.useState(false);
 
   const isLoading = useSelector((state: InventoryStore) => state.isLoading);
 
@@ -53,6 +55,19 @@ export const FolderView = () => {
       {!isLoading && folder && (
         <Col>
           <ElementDetails element={folder} />
+          <Row justify="end">
+            {addNew ? (
+              <Button onClick={() => setAddNew(false)}>Cancel</Button>
+            ) : (
+              <Button>Edit</Button>
+            )}
+            {addNew ? (
+              <Button>Done</Button>
+            ) : (
+              <Button onClick={() => setAddNew(true)}>New</Button>
+            )}
+          </Row>
+          {addNew && <NewElementEditor />}
           <Row>
             <Col>
               {folder.children.map((child, index) => (
