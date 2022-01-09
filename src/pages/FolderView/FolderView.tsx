@@ -13,6 +13,7 @@ import { InventoryStore } from "../../store/types";
 import { FolderDetails } from "./FolderView.types";
 import api from "../../api";
 import "./FolderView.scss";
+import { ChildDetails } from ".";
 
 export const FolderView = () => {
   const dispatch = useDispatch();
@@ -22,7 +23,9 @@ export const FolderView = () => {
   const [folder, setFolder] = React.useState<FolderDetails | undefined>(
     undefined
   );
-  const [addNew, setAddNew] = React.useState(false);
+  const [children, setChildren] = React.useState<ChildDetails[] | undefined>(
+    undefined
+  );
 
   const isLoading = useSelector((state: InventoryStore) => state.isLoading);
 
@@ -33,6 +36,7 @@ export const FolderView = () => {
       .then((response) => {
         console.log(response);
         setFolder(response.data.folder);
+        setChildren(response.data.folder.children);
         dispatch(setIsLoading(false));
       })
       .catch((error) => {
@@ -40,6 +44,20 @@ export const FolderView = () => {
         dispatch(setIsLoading(false));
       });
   }, [dispatch, params.folderid]);
+
+  const addNewElement = (newElement: any) => {
+    console.log(newElement);
+    if (!folder) {
+      return;
+    }
+    if (!children) {
+      setChildren([newElement]);
+    } else {
+      let childrenCopy = [...children];
+      childrenCopy.push(newElement);
+      setChildren(childrenCopy);
+    }
+  };
 
   return (
     <Container className="folder-view-container">
@@ -55,46 +73,38 @@ export const FolderView = () => {
       {!isLoading && folder && (
         <Col>
           <ElementDetails element={folder} />
-          <Row justify="end">
-            {addNew ? (
-              <Button onClick={() => setAddNew(false)}>Cancel</Button>
-            ) : (
-              <Button>Edit</Button>
-            )}
-            {addNew ? (
-              <Button>Done</Button>
-            ) : (
-              <Button onClick={() => setAddNew(true)}>New</Button>
-            )}
-          </Row>
-          {addNew && <NewElementEditor />}
+          <NewElementEditor
+            onCreateSuccess={addNewElement}
+            parent={folder.folderid}
+          />
           <Row>
             <Col>
-              {folder.children.map((child, index) => (
-                <Row
-                  className="folder-child"
-                  key={`${child.id}+${index}`}
-                  onClick={() => {
-                    navigate(`/${child.type}/${child.id}`, {
-                      state: params.folderid,
-                    });
-                  }}
-                >
-                  <Col cols={1}>
-                    <Row className="folder-child-name" justify="start">
-                      {child.type === "folder" ? (
-                        <AiFillFolder />
-                      ) : (
-                        <AiFillInfoCircle />
-                      )}
-                      <p className="details">{child.name}</p>
-                    </Row>
-                  </Col>
-                  <Col cols={4}>
-                    <div>Picture: {child.picture}</div>
-                  </Col>
-                </Row>
-              ))}
+              {children &&
+                children.map((child, index) => (
+                  <Row
+                    className="folder-child"
+                    key={`${child.id}+${index}`}
+                    onClick={() => {
+                      navigate(`/${child.type}/${child.id}`, {
+                        state: params.folderid,
+                      });
+                    }}
+                  >
+                    <Col cols={1}>
+                      <Row className="folder-child-name" justify="start">
+                        {child.type === "folder" ? (
+                          <AiFillFolder />
+                        ) : (
+                          <AiFillInfoCircle />
+                        )}
+                        <p className="details">{child.name}</p>
+                      </Row>
+                    </Col>
+                    <Col cols={4}>
+                      <div>Picture: {child.picture}</div>
+                    </Col>
+                  </Row>
+                ))}
             </Col>
           </Row>
         </Col>

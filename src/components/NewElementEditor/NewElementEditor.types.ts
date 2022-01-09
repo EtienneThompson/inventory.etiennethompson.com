@@ -1,1 +1,4 @@
-export interface NewElementEditorProps {}
+export interface NewElementEditorProps {
+  parent: string;
+  onCreateSuccess: (newElement: any) => void;
+}
