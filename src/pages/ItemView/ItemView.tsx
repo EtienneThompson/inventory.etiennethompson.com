@@ -26,7 +26,6 @@ export const ItemView = () => {
     api
       .get(`/inventory/item?itemid=${params.itemid}`)
       .then((response) => {
-        console.log(response);
         setItem(response.data.item);
         dispatch(setIsLoading(false));
       })

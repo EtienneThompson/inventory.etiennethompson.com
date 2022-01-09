@@ -10,10 +10,9 @@ import { NewElementEditor } from "../../components/NewElementEditor";
 import { AiFillFolder, AiFillInfoCircle } from "react-icons/ai";
 import { setIsLoading } from "../../store/actions";
 import { InventoryStore } from "../../store/types";
-import { FolderDetails } from "./FolderView.types";
+import { FolderDetails, ChildDetails } from "./FolderView.types";
 import api from "../../api";
 import "./FolderView.scss";
-import { ChildDetails } from ".";
 
 export const FolderView = () => {
   const dispatch = useDispatch();
@@ -34,7 +33,6 @@ export const FolderView = () => {
     api
       .get(`/inventory/folder?folderid=${params.folderid}`)
       .then((response) => {
-        console.log(response);
         setFolder(response.data.folder);
         setChildren(response.data.folder.children);
         dispatch(setIsLoading(false));
@@ -46,7 +44,6 @@ export const FolderView = () => {
   }, [dispatch, params.folderid]);
 
   const addNewElement = (newElement: any) => {
-    console.log(newElement);
     if (!folder) {
       return;
     }
