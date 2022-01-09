@@ -2,6 +2,7 @@ import { FunctionComponent } from "react";
 import { Row, Col } from "../common/Grid";
 import { ElementDetailsProps } from "./ElementDetails.types";
 import "./ElementDetails.scss";
+import { Button } from "../common/Button";
 
 export const ElementDetails: FunctionComponent<ElementDetailsProps> = (
   props: ElementDetailsProps
@@ -9,6 +10,9 @@ export const ElementDetails: FunctionComponent<ElementDetailsProps> = (
   return (
     <Row>
       <Col>
+        <Row justify="end">
+          <Button>Edit</Button>
+        </Row>
         <Row>
           <Col align="start" cols={1}>
             <p className="details">Name: {props.element.name}</p>

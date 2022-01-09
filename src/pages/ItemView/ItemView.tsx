@@ -2,6 +2,7 @@ import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router";
 import { useParams } from "react-router-dom";
+import { Button } from "../../components/common/Button";
 import { Container, Row } from "../../components/common/Grid";
 import api from "../../api";
 import { setIsLoading } from "../../store/actions";
@@ -10,7 +11,6 @@ import { LoadingSpinner } from "../../components/common/LoadingSpinner";
 import { ElementDetails } from "../../components/ElementDetails/ElementDetails";
 import { ItemDetails } from "./ItemView.types";
 import "./ItemView.scss";
-import { Button } from "../../components/common/Button";
 
 export const ItemView = () => {
   const dispatch = useDispatch();
@@ -26,7 +26,6 @@ export const ItemView = () => {
     api
       .get(`/inventory/item?itemid=${params.itemid}`)
       .then((response) => {
-        console.log(response);
         setItem(response.data.item);
         dispatch(setIsLoading(false));
       })
@@ -37,7 +36,7 @@ export const ItemView = () => {
   }, [dispatch, params.itemid]);
 
   return (
-    <Container>
+    <Container className="item-view-container">
       <Row>
         {item && item.parent_folder && (
           <Button onClick={() => navigate(`/folder/${item.parent_folder}`)}>
