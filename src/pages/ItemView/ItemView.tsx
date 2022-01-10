@@ -46,7 +46,7 @@ export const ItemView = () => {
         <h2>Item #{params.itemid}</h2>
       </Row>
       {isLoading && <LoadingSpinner />}
-      {!isLoading && item && <ElementDetails element={item} />}
+      {!isLoading && item && <ElementDetails element={item} type={"item"} />}
     </Container>
   );
 };

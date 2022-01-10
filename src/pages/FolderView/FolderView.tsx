@@ -69,7 +69,11 @@ export const FolderView = () => {
       {isLoading && <LoadingSpinner />}
       {!isLoading && folder && (
         <Col>
-          <ElementDetails element={folder} />
+          <ElementDetails
+            element={folder}
+            type={"folder"}
+            numChildren={folder.children.length}
+          />
           <NewElementEditor
             onCreateSuccess={addNewElement}
             parent={folder.folderid}
