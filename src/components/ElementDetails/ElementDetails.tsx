@@ -76,6 +76,18 @@ export const ElementDetails: FunctionComponent<ElementDetailsProps> = (
       })
       .then((response) => {
         props.updateElement(editedName, editedDesc, editedPict);
+        let cachedParent = props.memo.retrieveFromMemo(
+          props.element.parent_folder
+        );
+        let elementId = !!props.element.folderid
+          ? props.element.folderid
+          : props.element.itemid;
+        let updatedChild = cachedParent.children.filter(
+          (child: any) => child.id === elementId
+        )[0];
+        updatedChild.name = editedName;
+        updatedChild.picture = editedPict;
+        props.memo.addToMemo(props.element.parent_folder, cachedParent);
         resetFields();
         setEditing(false);
         setIsWaiting(false);

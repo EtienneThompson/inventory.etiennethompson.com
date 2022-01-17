@@ -75,6 +75,7 @@ export const ItemView: FunctionComponent<ItemProps> = (props: ItemProps) => {
       {isLoading && <LoadingSpinner />}
       {!isLoading && item && (
         <ElementDetails
+          memo={props.memo}
           element={item}
           type={"item"}
           updateElement={updateItem}

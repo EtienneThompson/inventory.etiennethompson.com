@@ -110,6 +110,7 @@ export const FolderView: FunctionComponent<FolderProps> = (
       {!isLoading && folder && (
         <Col>
           <ElementDetails
+            memo={props.memo}
             element={folder}
             type={"folder"}
             updateElement={updateFolder}
