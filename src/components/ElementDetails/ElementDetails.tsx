@@ -85,9 +85,9 @@ export const ElementDetails: FunctionComponent<ElementDetailsProps> = (
 
   return (
     <Row>
-      <Col className="overlay">
+      <Col className="element-details-overlay">
         {isEditing && (
-          <div className="loading-area">
+          <div className="element-details-loading-area">
             <LoadingSpinner />
           </div>
         )}
