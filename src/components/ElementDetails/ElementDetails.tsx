@@ -1,4 +1,4 @@
-import { FunctionComponent } from "react";
+import React, { FunctionComponent } from "react";
 import { useNavigate } from "react-router";
 import { Button } from "../common/Button";
 import { Row, Col } from "../common/Grid";
@@ -10,6 +10,21 @@ export const ElementDetails: FunctionComponent<ElementDetailsProps> = (
   props: ElementDetailsProps
 ) => {
   const navigate = useNavigate();
+  const [editing, setEditing] = React.useState(false);
+  const [editedName, setEditedName] = React.useState("");
+  const [editedDesc, setEditedDesc] = React.useState("");
+  const [editedPict, setEditedPict] = React.useState<any>(null);
+
+  React.useEffect(() => {
+    setEditedName(props.element.name);
+    setEditedDesc(props.element.description);
+  }, [props.element]);
+
+  const resetFields = () => {
+    setEditedName(props.element.name);
+    setEditedDesc(props.element.description);
+    setEditedPict(null);
+  };
 
   const onDeleteButtonClicked = () => {
     let deleteData = {} as DeleteRequest;
@@ -30,6 +45,33 @@ export const ElementDetails: FunctionComponent<ElementDetailsProps> = (
       .catch((error) => console.log(error));
   };
 
+  const onEditButtonClicked = () => {
+    setEditing(true);
+  };
+
+  const onCancelButtonClicked = () => {
+    resetFields();
+    setEditing(false);
+  };
+
+  const onDoneButtonClicked = () => {
+    api
+      .put(`/inventory/${props.type}/update`, {
+        data: {
+          id: !!props.element.folderid
+            ? props.element.folderid
+            : props.element.itemid,
+          name: editedName,
+          description: editedDesc,
+          picture: editedPict,
+        },
+      })
+      .then((response) => console.log(response))
+      .catch((error) => console.log(error));
+    resetFields();
+    setEditing(false);
+  };
+
   return (
     <Row>
       <Col>
@@ -37,15 +79,52 @@ export const ElementDetails: FunctionComponent<ElementDetailsProps> = (
           {(!props.numChildren || props.numChildren === 0) && (
             <Button onClick={onDeleteButtonClicked}>Delete</Button>
           )}
-          <Button>Edit</Button>
+          {!editing && <Button onClick={onEditButtonClicked}>Edit</Button>}
+          {editing && <Button onClick={onCancelButtonClicked}>Cancel</Button>}
+          {editing && <Button onClick={onDoneButtonClicked}>Done</Button>}
         </Row>
         <Row>
           <Col align="start" cols={1}>
-            <p className="details">Name: {props.element.name}</p>
-            <p className="details">Description: {props.element.description}</p>
+            <Row justify="start">
+              <div className="details">Name:</div>
+              {!editing && <p className="details">{props.element.name}</p>}
+              {editing && (
+                <input
+                  type="text"
+                  value={editedName}
+                  onChange={(event: any) => {
+                    setEditedName(event.currentTarget.value);
+                  }}
+                />
+              )}
+            </Row>
+            <Row justify="start">
+              <div className="details">Description:</div>
+              {!editing && (
+                <p className="details">{props.element.description}</p>
+              )}
+              {editing && (
+                <input
+                  type="text"
+                  value={editedDesc}
+                  onChange={(event: any) => {
+                    setEditedDesc(event.currentTarget.value);
+                  }}
+                />
+              )}
+            </Row>
           </Col>
           <Col align="center" cols={4}>
-            <div>Picture: {props.element.picture}</div>
+            {!editing && <div>Picture: {props.element.picture}</div>}
+            {editing && (
+              <input
+                type="file"
+                accept="image/*"
+                onChange={(event: any) => {
+                  setEditedPict(event.target.files[0]);
+                }}
+              />
+            )}
           </Col>
         </Row>
         <Row>
