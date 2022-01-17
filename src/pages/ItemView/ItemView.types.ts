@@ -1,3 +1,9 @@
+import Memo from "../../utils/memoization";
+
+export interface ItemProps {
+  memo: Memo;
+}
+
 export interface ItemDetails {
   itemid: string;
   name: string;

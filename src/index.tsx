@@ -10,7 +10,11 @@ import { ItemView } from "./pages/ItemView";
 import { FolderView } from "./pages/FolderView";
 import reportWebVitals from "./reportWebVitals";
 import { store } from "./store/store";
+import Memo from "./utils/memoization";
 import "./index.scss";
+
+// Instantiate global memo object that can be passed to pages as needed.
+let memo = new Memo();
 
 ReactDOM.render(
   <Provider store={store}>
@@ -20,8 +24,11 @@ ReactDOM.render(
           <Route path="" element={<LandingPage />} />
           <Route path="login" element={<Login />} />
           <Route path="logout" element={<Logout />} />
-          <Route path="item/:itemid" element={<ItemView />} />
-          <Route path="folder/:folderid" element={<FolderView />} />
+          <Route path="item/:itemid" element={<ItemView memo={memo} />} />
+          <Route
+            path="folder/:folderid"
+            element={<FolderView memo={memo} />}
+          />
         </Route>
       </Routes>
     </BrowserRouter>

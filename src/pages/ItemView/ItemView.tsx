@@ -1,4 +1,4 @@
-import React from "react";
+import React, { FunctionComponent } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router";
 import { useParams } from "react-router-dom";
@@ -9,10 +9,10 @@ import { setIsLoading } from "../../store/actions";
 import { InventoryStore } from "../../store/types";
 import { LoadingSpinner } from "../../components/common/LoadingSpinner";
 import { ElementDetails } from "../../components/ElementDetails/ElementDetails";
-import { ItemDetails } from "./ItemView.types";
+import { ItemProps, ItemDetails } from "./ItemView.types";
 import "./ItemView.scss";
 
-export const ItemView = () => {
+export const ItemView: FunctionComponent<ItemProps> = (props: ItemProps) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const params = useParams();
@@ -23,17 +23,31 @@ export const ItemView = () => {
 
   React.useEffect(() => {
     dispatch(setIsLoading(true));
-    api
-      .get(`/inventory/item?itemid=${params.itemid}`)
-      .then((response) => {
-        setItem(response.data.item);
-        dispatch(setIsLoading(false));
-      })
-      .catch((error) => {
-        console.log(error);
-        dispatch(setIsLoading(false));
-      });
-  }, [dispatch, params.itemid]);
+    if (!params.itemid) {
+      dispatch(setIsLoading(false));
+      return;
+    }
+    let cachedItem = props.memo.retrieveFromMemo(params.itemid);
+    if (cachedItem) {
+      // If the item is in the cache use that data.
+      dispatch(setIsLoading(false));
+      setItem(cachedItem);
+    } else {
+      // Otherwise fetch data from the database and cache it.
+      api
+        .get(`/inventory/item?itemid=${params.itemid}`)
+        .then((response) => {
+          if (params.itemid)
+            props.memo.addToMemo(params.itemid, response.data.item);
+          setItem(response.data.item);
+          dispatch(setIsLoading(false));
+        })
+        .catch((error) => {
+          console.log(error);
+          dispatch(setIsLoading(false));
+        });
+    }
+  }, [dispatch, params.itemid, props.memo]);
 
   const updateItem = (newName: string, newDesc: string, newPict: string) => {
     if (!item) {
@@ -44,6 +58,8 @@ export const ItemView = () => {
     newItem.description = newDesc;
     newItem.picture = newPict;
     setItem(newItem);
+    // Update the cache when fields are edited.
+    props.memo.addToMemo(newItem.itemid, newItem);
   };
 
   return (
@@ -59,6 +75,7 @@ export const ItemView = () => {
       {isLoading && <LoadingSpinner />}
       {!isLoading && item && (
         <ElementDetails
+          memo={props.memo}
           element={item}
           type={"item"}
           updateElement={updateItem}
