@@ -4,6 +4,7 @@ import { Button } from "../common/Button";
 import { Row, Col } from "../common/Grid";
 import { ElementDetailsProps, DeleteRequest } from "./ElementDetails.types";
 import api from "../../api";
+import { LoadingSpinner } from "../common/LoadingSpinner";
 import "./ElementDetails.scss";
 
 export const ElementDetails: FunctionComponent<ElementDetailsProps> = (
@@ -14,6 +15,7 @@ export const ElementDetails: FunctionComponent<ElementDetailsProps> = (
   const [editedName, setEditedName] = React.useState("");
   const [editedDesc, setEditedDesc] = React.useState("");
   const [editedPict, setEditedPict] = React.useState<any>(null);
+  const [isEditing, setIsEditing] = React.useState(false);
 
   React.useEffect(() => {
     setEditedName(props.element.name);
@@ -55,6 +57,7 @@ export const ElementDetails: FunctionComponent<ElementDetailsProps> = (
   };
 
   const onDoneButtonClicked = () => {
+    setIsEditing(true);
     api
       .put(`/inventory/${props.type}/update`, {
         data: {
@@ -66,15 +69,28 @@ export const ElementDetails: FunctionComponent<ElementDetailsProps> = (
           picture: editedPict,
         },
       })
-      .then((response) => console.log(response))
-      .catch((error) => console.log(error));
-    resetFields();
-    setEditing(false);
+      .then((response) => {
+        props.updateElement(editedName, editedDesc, editedPict);
+        resetFields();
+        setEditing(false);
+        setIsEditing(false);
+      })
+      .catch((error) => {
+        console.log(error);
+        resetFields();
+        setEditing(false);
+        setIsEditing(false);
+      });
   };
 
   return (
     <Row>
-      <Col>
+      <Col className="overlay">
+        {isEditing && (
+          <div className="loading-area">
+            <LoadingSpinner />
+          </div>
+        )}
         <Row justify="end">
           {(!props.numChildren || props.numChildren === 0) && (
             <Button onClick={onDeleteButtonClicked}>Delete</Button>

@@ -1,6 +1,7 @@
 export interface ElementDetailsProps {
   element: ElementComponents;
   type: string;
+  updateElement: (newName: string, newDesc: string, newPict: string) => void;
   numChildren?: number;
 }
 

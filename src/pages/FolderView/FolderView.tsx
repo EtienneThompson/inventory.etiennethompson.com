@@ -56,6 +56,17 @@ export const FolderView = () => {
     }
   };
 
+  const updateFolder = (newName: string, newDesc: string, newPict: any) => {
+    if (!folder) {
+      return;
+    }
+    let newFolder = { ...folder };
+    newFolder.name = newName;
+    newFolder.description = newDesc;
+    newFolder.picture = newPict;
+    setFolder(newFolder);
+  };
+
   return (
     <Container className="folder-view-container">
       <Row>
@@ -72,6 +83,7 @@ export const FolderView = () => {
           <ElementDetails
             element={folder}
             type={"folder"}
+            updateElement={updateFolder}
             numChildren={folder.children.length}
           />
           <NewElementEditor

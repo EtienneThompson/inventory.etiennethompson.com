@@ -35,6 +35,17 @@ export const ItemView = () => {
       });
   }, [dispatch, params.itemid]);
 
+  const updateItem = (newName: string, newDesc: string, newPict: string) => {
+    if (!item) {
+      return;
+    }
+    let newItem = { ...item };
+    newItem.name = newName;
+    newItem.description = newDesc;
+    newItem.picture = newPict;
+    setItem(newItem);
+  };
+
   return (
     <Container className="item-view-container">
       <Row>
@@ -46,7 +57,13 @@ export const ItemView = () => {
         <h2>Item #{params.itemid}</h2>
       </Row>
       {isLoading && <LoadingSpinner />}
-      {!isLoading && item && <ElementDetails element={item} type={"item"} />}
+      {!isLoading && item && (
+        <ElementDetails
+          element={item}
+          type={"item"}
+          updateElement={updateItem}
+        />
+      )}
     </Container>
   );
 };
