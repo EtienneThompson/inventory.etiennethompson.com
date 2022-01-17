@@ -55,6 +55,19 @@ export const ElementDetails: FunctionComponent<ElementDetailsProps> = (
   };
 
   const onDoneButtonClicked = () => {
+    api
+      .put(`/inventory/${props.type}/update`, {
+        data: {
+          id: !!props.element.folderid
+            ? props.element.folderid
+            : props.element.itemid,
+          name: editedName,
+          description: editedDesc,
+          picture: editedPict,
+        },
+      })
+      .then((response) => console.log(response))
+      .catch((error) => console.log(error));
     resetFields();
     setEditing(false);
   };
