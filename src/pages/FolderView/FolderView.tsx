@@ -39,10 +39,12 @@ export const FolderView: FunctionComponent<FolderProps> = (
     }
     let cachedFolder = props.memo.retrieveFromMemo(folderid);
     if (cachedFolder) {
+      // If the element is in the cache, use that data.
       dispatch(setIsLoading(false));
       setFolder(cachedFolder);
       setChildren(cachedFolder.children);
     } else {
+      // Otherwise, get the data from the database and then cache it.
       api
         .get(`/inventory/folder?folderid=${params.folderid}`)
         .then((response) => {

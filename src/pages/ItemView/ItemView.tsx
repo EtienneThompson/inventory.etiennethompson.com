@@ -23,10 +23,17 @@ export const ItemView: FunctionComponent<ItemProps> = (props: ItemProps) => {
 
   React.useEffect(() => {
     dispatch(setIsLoading(true));
-    if (params.itemid && props.memo.retrieveFromMemo(params.itemid)) {
+    if (!params.itemid) {
       dispatch(setIsLoading(false));
-      setItem(props.memo.retrieveFromMemo(params.itemid));
+      return;
+    }
+    let cachedItem = props.memo.retrieveFromMemo(params.itemid);
+    if (cachedItem) {
+      // If the item is in the cache use that data.
+      dispatch(setIsLoading(false));
+      setItem(cachedItem);
     } else {
+      // Otherwise fetch data from the database and cache it.
       api
         .get(`/inventory/item?itemid=${params.itemid}`)
         .then((response) => {

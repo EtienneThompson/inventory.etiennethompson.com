@@ -13,6 +13,7 @@ import { store } from "./store/store";
 import Memo from "./utils/memoization";
 import "./index.scss";
 
+// Instantiate global memo object that can be passed to pages as needed.
 let memo = new Memo();
 
 ReactDOM.render(
