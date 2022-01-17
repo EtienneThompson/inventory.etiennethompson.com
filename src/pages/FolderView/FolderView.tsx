@@ -13,6 +13,7 @@ import { InventoryStore } from "../../store/types";
 import { FolderProps, FolderDetails, ChildDetails } from "./FolderView.types";
 import api from "../../api";
 import "./FolderView.scss";
+import { extractQueryParam } from "../../utils/window";
 
 export const FolderView: FunctionComponent<FolderProps> = (
   props: FolderProps
@@ -32,13 +33,15 @@ export const FolderView: FunctionComponent<FolderProps> = (
 
   React.useEffect(() => {
     dispatch(setIsLoading(true));
+    let force_update = extractQueryParam("force_update");
+
     let folderid = params.folderid;
     if (!folderid) {
       dispatch(setIsLoading(false));
       return;
     }
     let cachedFolder = props.memo.retrieveFromMemo(folderid);
-    if (cachedFolder) {
+    if (cachedFolder && !force_update) {
       // If the element is in the cache, use that data.
       dispatch(setIsLoading(false));
       setFolder(cachedFolder);

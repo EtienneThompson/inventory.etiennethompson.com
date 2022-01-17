@@ -44,7 +44,7 @@ export const ElementDetails: FunctionComponent<ElementDetailsProps> = (
         // Since the item no longer exists, navigate the user back to the
         // parent folder.
         setIsWaiting(false);
-        navigate(`/folder/${props.element.parent_folder}`);
+        navigate(`/folder/${props.element.parent_folder}?force_update=true`);
       })
       .catch((error) => {
         console.log(error);
