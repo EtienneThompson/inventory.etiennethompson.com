@@ -3,3 +3,7 @@ export enum LocalStorageKey {
   IsUser = "IsUser",
   IsAdmin = "IsAdmin",
 }
+
+export interface MemoInterface {
+  [key: string]: any;
+}

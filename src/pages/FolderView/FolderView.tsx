@@ -1,4 +1,4 @@
-import React from "react";
+import React, { FunctionComponent } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router";
 import { useNavigate } from "react-router";
@@ -10,11 +10,13 @@ import { NewElementEditor } from "../../components/NewElementEditor";
 import { AiFillFolder, AiFillInfoCircle } from "react-icons/ai";
 import { setIsLoading } from "../../store/actions";
 import { InventoryStore } from "../../store/types";
-import { FolderDetails, ChildDetails } from "./FolderView.types";
+import { FolderProps, FolderDetails, ChildDetails } from "./FolderView.types";
 import api from "../../api";
 import "./FolderView.scss";
 
-export const FolderView = () => {
+export const FolderView: FunctionComponent<FolderProps> = (
+  props: FolderProps
+) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const params = useParams();
@@ -30,18 +32,31 @@ export const FolderView = () => {
 
   React.useEffect(() => {
     dispatch(setIsLoading(true));
-    api
-      .get(`/inventory/folder?folderid=${params.folderid}`)
-      .then((response) => {
-        setFolder(response.data.folder);
-        setChildren(response.data.folder.children);
-        dispatch(setIsLoading(false));
-      })
-      .catch((error) => {
-        console.log(error);
-        dispatch(setIsLoading(false));
-      });
-  }, [dispatch, params.folderid]);
+    let folderid = params.folderid;
+    if (!folderid) {
+      dispatch(setIsLoading(false));
+      return;
+    }
+    let cachedFolder = props.memo.retrieveFromMemo(folderid);
+    if (cachedFolder) {
+      dispatch(setIsLoading(false));
+      setFolder(cachedFolder);
+      setChildren(cachedFolder.children);
+    } else {
+      api
+        .get(`/inventory/folder?folderid=${params.folderid}`)
+        .then((response) => {
+          if (folderid) props.memo.addToMemo(folderid, response.data.folder);
+          setFolder(response.data.folder);
+          setChildren(response.data.folder.children);
+          dispatch(setIsLoading(false));
+        })
+        .catch((error) => {
+          console.log(error);
+          dispatch(setIsLoading(false));
+        });
+    }
+  }, [dispatch, params.folderid, props.memo]);
 
   const addNewElement = (newElement: any) => {
     if (!folder) {

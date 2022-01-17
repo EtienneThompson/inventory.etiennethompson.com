@@ -1,3 +1,9 @@
+import Memo from "../../utils/memoization";
+
+export interface FolderProps {
+  memo: Memo;
+}
+
 export interface FolderDetails {
   folderid: string;
   name: string;
