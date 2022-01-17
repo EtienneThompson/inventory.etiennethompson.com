@@ -4,6 +4,7 @@ import { Button } from "../common/Button";
 import { Row, Col } from "../common/Grid";
 import { ElementDetailsProps, DeleteRequest } from "./ElementDetails.types";
 import api from "../../api";
+import { LoadingSpinner } from "../common/LoadingSpinner";
 import "./ElementDetails.scss";
 
 export const ElementDetails: FunctionComponent<ElementDetailsProps> = (
@@ -14,6 +15,7 @@ export const ElementDetails: FunctionComponent<ElementDetailsProps> = (
   const [editedName, setEditedName] = React.useState("");
   const [editedDesc, setEditedDesc] = React.useState("");
   const [editedPict, setEditedPict] = React.useState<any>(null);
+  const [isWaiting, setIsWaiting] = React.useState(false);
 
   React.useEffect(() => {
     setEditedName(props.element.name);
@@ -27,6 +29,7 @@ export const ElementDetails: FunctionComponent<ElementDetailsProps> = (
   };
 
   const onDeleteButtonClicked = () => {
+    setIsWaiting(true);
     let deleteData = {} as DeleteRequest;
     if (props.type === "folder" && props.element.folderid) {
       deleteData.folderid = props.element.folderid;
@@ -40,9 +43,13 @@ export const ElementDetails: FunctionComponent<ElementDetailsProps> = (
       .then((response) => {
         // Since the item no longer exists, navigate the user back to the
         // parent folder.
+        setIsWaiting(false);
         navigate(`/folder/${props.element.parent_folder}`);
       })
-      .catch((error) => console.log(error));
+      .catch((error) => {
+        console.log(error);
+        setIsWaiting(false);
+      });
   };
 
   const onEditButtonClicked = () => {
@@ -55,6 +62,7 @@ export const ElementDetails: FunctionComponent<ElementDetailsProps> = (
   };
 
   const onDoneButtonClicked = () => {
+    setIsWaiting(true);
     api
       .put(`/inventory/${props.type}/update`, {
         data: {
@@ -66,15 +74,28 @@ export const ElementDetails: FunctionComponent<ElementDetailsProps> = (
           picture: editedPict,
         },
       })
-      .then((response) => console.log(response))
-      .catch((error) => console.log(error));
-    resetFields();
-    setEditing(false);
+      .then((response) => {
+        props.updateElement(editedName, editedDesc, editedPict);
+        resetFields();
+        setEditing(false);
+        setIsWaiting(false);
+      })
+      .catch((error) => {
+        console.log(error);
+        resetFields();
+        setEditing(false);
+        setIsWaiting(false);
+      });
   };
 
   return (
     <Row>
-      <Col>
+      <Col className="element-details-overlay">
+        {isWaiting && (
+          <div className="element-details-loading-area">
+            <LoadingSpinner />
+          </div>
+        )}
         <Row justify="end">
           {(!props.numChildren || props.numChildren === 0) && (
             <Button onClick={onDeleteButtonClicked}>Delete</Button>

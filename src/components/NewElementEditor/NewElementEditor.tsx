@@ -5,6 +5,7 @@ import { Button } from "../common/Button";
 import { NewElementEditorProps } from "./NewElementEditor.types";
 import api from "../../api";
 import "./NewElementEditor.scss";
+import { LoadingSpinner } from "../common/LoadingSpinner";
 
 export const NewElementEditor: FunctionComponent<NewElementEditorProps> = (
   props: NewElementEditorProps
@@ -16,6 +17,7 @@ export const NewElementEditor: FunctionComponent<NewElementEditorProps> = (
   const [description, setDescription] = React.useState("");
   const [picture, setPicture] = React.useState<any>(null);
   const [elementTypeIndex, setElementTypeIndex] = React.useState(0);
+  const [isCreating, setIsCreating] = React.useState(false);
 
   const resetFields = () => {
     setName("");
@@ -29,7 +31,7 @@ export const NewElementEditor: FunctionComponent<NewElementEditorProps> = (
   };
 
   const onDoneButtonClicked = () => {
-    resetFields();
+    setIsCreating(true);
     // Format data and send API request to create element.
     const createElementRequest = {
       name: name,
@@ -44,13 +46,23 @@ export const NewElementEditor: FunctionComponent<NewElementEditorProps> = (
       })
       .then((response) => {
         props.onCreateSuccess(response.data.createdElement);
+        setIsCreating(false);
+        resetFields();
       })
-      .catch((error) => console.log(error));
+      .catch((error) => {
+        console.log(error);
+        setIsCreating(false);
+      });
   };
 
   return (
     <Row>
-      <Col>
+      <Col className="new-element-overlay">
+        {isCreating && (
+          <div className="new-element-loading-area">
+            <LoadingSpinner />
+          </div>
+        )}
         <Row justify="end">
           {!addNew && <Button onClick={() => setAddNew(true)}>New</Button>}
           {addNew && <Button onClick={onCancelButtonClicked}>Cancel</Button>}
