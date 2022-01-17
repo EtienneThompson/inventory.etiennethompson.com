@@ -15,7 +15,7 @@ export const ElementDetails: FunctionComponent<ElementDetailsProps> = (
   const [editedName, setEditedName] = React.useState("");
   const [editedDesc, setEditedDesc] = React.useState("");
   const [editedPict, setEditedPict] = React.useState<any>(null);
-  const [isEditing, setIsEditing] = React.useState(false);
+  const [isWaiting, setIsWaiting] = React.useState(false);
 
   React.useEffect(() => {
     setEditedName(props.element.name);
@@ -57,7 +57,7 @@ export const ElementDetails: FunctionComponent<ElementDetailsProps> = (
   };
 
   const onDoneButtonClicked = () => {
-    setIsEditing(true);
+    setIsWaiting(true);
     api
       .put(`/inventory/${props.type}/update`, {
         data: {
@@ -73,20 +73,20 @@ export const ElementDetails: FunctionComponent<ElementDetailsProps> = (
         props.updateElement(editedName, editedDesc, editedPict);
         resetFields();
         setEditing(false);
-        setIsEditing(false);
+        setIsWaiting(false);
       })
       .catch((error) => {
         console.log(error);
         resetFields();
         setEditing(false);
-        setIsEditing(false);
+        setIsWaiting(false);
       });
   };
 
   return (
     <Row>
       <Col className="element-details-overlay">
-        {isEditing && (
+        {isWaiting && (
           <div className="element-details-loading-area">
             <LoadingSpinner />
           </div>
