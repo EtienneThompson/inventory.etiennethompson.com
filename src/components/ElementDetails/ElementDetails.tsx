@@ -29,6 +29,7 @@ export const ElementDetails: FunctionComponent<ElementDetailsProps> = (
   };
 
   const onDeleteButtonClicked = () => {
+    setIsWaiting(true);
     let deleteData = {} as DeleteRequest;
     if (props.type === "folder" && props.element.folderid) {
       deleteData.folderid = props.element.folderid;
@@ -42,9 +43,13 @@ export const ElementDetails: FunctionComponent<ElementDetailsProps> = (
       .then((response) => {
         // Since the item no longer exists, navigate the user back to the
         // parent folder.
+        setIsWaiting(false);
         navigate(`/folder/${props.element.parent_folder}`);
       })
-      .catch((error) => console.log(error));
+      .catch((error) => {
+        console.log(error);
+        setIsWaiting(false);
+      });
   };
 
   const onEditButtonClicked = () => {
