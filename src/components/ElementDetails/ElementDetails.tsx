@@ -44,6 +44,8 @@ export const ElementDetails: FunctionComponent<ElementDetailsProps> = (
         // Since the item no longer exists, navigate the user back to the
         // parent folder.
         setIsWaiting(false);
+        // Set the force_update flag when navigating back to refetch the data
+        // from the database.
         navigate(`/folder/${props.element.parent_folder}?force_update=true`);
       })
       .catch((error) => {
@@ -76,18 +78,22 @@ export const ElementDetails: FunctionComponent<ElementDetailsProps> = (
       })
       .then((response) => {
         props.updateElement(editedName, editedDesc, editedPict);
+        // Fetch the cached parent from the cache.
         let cachedParent = props.memo.retrieveFromMemo(
           props.element.parent_folder
         );
+        // Find the child this current element corresponds to.
         let elementId = !!props.element.folderid
           ? props.element.folderid
           : props.element.itemid;
         let updatedChild = cachedParent.children.filter(
           (child: any) => child.id === elementId
         )[0];
+        // Update it's fields and update the cache.
         updatedChild.name = editedName;
         updatedChild.picture = editedPict;
         props.memo.addToMemo(props.element.parent_folder, cachedParent);
+        // Reset UI fields.
         resetFields();
         setEditing(false);
         setIsWaiting(false);
