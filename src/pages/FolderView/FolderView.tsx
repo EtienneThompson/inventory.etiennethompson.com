@@ -64,13 +64,20 @@ export const FolderView: FunctionComponent<FolderProps> = (
     if (!folder) {
       return;
     }
+    let newChildren = undefined;
     if (!children) {
       setChildren([newElement]);
+      newChildren = [newElement];
     } else {
       let childrenCopy = [...children];
       childrenCopy.push(newElement);
       setChildren(childrenCopy);
+      newChildren = childrenCopy;
     }
+    // Update the cache when a new child is added.
+    let newCacheFolder = { ...folder };
+    newCacheFolder.children = newChildren;
+    props.memo.addToMemo(newCacheFolder.folderid, newCacheFolder);
   };
 
   const updateFolder = (newName: string, newDesc: string, newPict: any) => {
@@ -82,6 +89,8 @@ export const FolderView: FunctionComponent<FolderProps> = (
     newFolder.description = newDesc;
     newFolder.picture = newPict;
     setFolder(newFolder);
+    // Update the cache when a folder is edited.
+    props.memo.addToMemo(newFolder.folderid, newFolder);
   };
 
   return (
