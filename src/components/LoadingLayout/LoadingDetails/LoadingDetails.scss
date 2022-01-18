@@ -1,0 +1,62 @@
+@keyframes loading {
+    100% {
+        transform: translateX(100%);
+    }
+}
+
+.hidden-overflow {
+    overflow: hidden;
+}
+
+.details-skeleton-container {
+    background-color: white;
+    border-radius: 5px;
+}
+
+.details-skeleton-button {
+    background-color: rgba(240, 240, 240, 0.8);
+    width: 50px;
+    height: 30px;
+    margin: 2px;
+    border-radius: 5px;
+}
+
+.details-skeleton-main-descriptor {
+    background-color: rgba(240, 240, 240, 0.8);
+    width: 80%;
+    height: 30px;
+    margin: 2px;
+    border-radius: 5px;
+}
+
+.details-skeleton-image-placeholder {
+    background-color: rgba(240, 240, 240, 0.8);
+    min-width: 100%;
+    min-height: 116px;
+    margin: 5px;
+    border-radius: 5px;
+}
+
+.details-skeleton-second-descriptor {
+    background-color: rgba(240, 240, 240, 0.8);
+    width: 50%;
+    height: 20px;
+    margin: 2px;
+    border-radius: 5px;
+}
+
+.loading {
+    position: relative;
+    overflow: hidden;
+}
+
+.loading::after {
+    position: absolute;
+    display: block;
+    content: "";
+    width: 100%;
+    height: 100%;
+    transform: translateX(-100%);
+    background-image: linear-gradient(90deg, transparent, rgba(180, 180, 180, 0.6), transparent);
+    animation: loading 1.5s infinite;
+}
