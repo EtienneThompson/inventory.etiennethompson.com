@@ -4,7 +4,10 @@ import { useParams } from "react-router";
 import { useNavigate } from "react-router";
 import { Button } from "../../components/common/Button";
 import { Container, Row, Col } from "../../components/common/Grid";
-import { LoadingSpinner } from "../../components/common/LoadingSpinner";
+import {
+  LoadingChildren,
+  LoadingDetails,
+} from "../../components/LoadingLayout";
 import { ElementDetails } from "../../components/ElementDetails";
 import { NewElementEditor } from "../../components/NewElementEditor";
 import { AiFillFolder, AiFillInfoCircle } from "react-icons/ai";
@@ -106,7 +109,14 @@ export const FolderView: FunctionComponent<FolderProps> = (
         )}
         <h2>Folder #{params.folderid}</h2>
       </Row>
-      {isLoading && <LoadingSpinner />}
+      {isLoading && (
+        <Row>
+          <Col>
+            <LoadingDetails />
+            <LoadingChildren />
+          </Col>
+        </Row>
+      )}
       {!isLoading && folder && (
         <Col>
           <ElementDetails
