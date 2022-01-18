@@ -4,16 +4,7 @@
     }
 }
 
-.hidden-overflow {
-    overflow: hidden;
-}
-
-.details-skeleton-container {
-    background-color: white;
-    border-radius: 5px;
-}
-
-.details-skeleton-button {
+.children-skeleton-button {
     background-color: rgba(240, 240, 240, 0.8);
     width: 50px;
     height: 30px;
@@ -21,7 +12,7 @@
     border-radius: 5px;
 }
 
-.details-skeleton-main-descriptor {
+.children-skeleton-name {
     background-color: rgba(240, 240, 240, 0.8);
     width: 80%;
     height: 30px;
@@ -29,34 +20,31 @@
     border-radius: 5px;
 }
 
-.details-skeleton-image-placeholder {
+.children-skeleton-picture {
     background-color: rgba(240, 240, 240, 0.8);
-    min-width: 100%;
-    min-height: 116px;
-    margin: 5px;
-    border-radius: 5px;
-}
-
-.details-skeleton-second-descriptor {
-    background-color: rgba(240, 240, 240, 0.8);
-    width: 50%;
-    height: 20px;
+    width: 100px;
+    height: 100px;
     margin: 2px;
     border-radius: 5px;
 }
 
-.loading {
+.children-skeleton-child-container {
+    border: 1px solid lightgray;
+    border-radius: 5px;
+}
+
+.children-loading {
     position: relative;
     overflow: hidden;
 }
 
-.loading::after {
+.children-loading::after {
     position: absolute;
     display: block;
     content: "";
     width: 100%;
     height: 100%;
     transform: translateX(-100%);
-    background-image: linear-gradient(90deg, transparent, rgba(180, 180, 180, 0.6), transparent);
+    background-image: linear-gradient(90deg, transparent, rgba(180, 180, 180, 0.8), transparent);
     animation: loading 2s infinite;
 }
