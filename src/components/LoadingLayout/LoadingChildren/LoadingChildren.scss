@@ -4,28 +4,26 @@
     }
 }
 
-.children-skeleton-button {
+.children-skeleton-general {
     background-color: rgba(240, 240, 240, 0.8);
-    width: 50px;
-    height: 30px;
     margin: 2px;
     border-radius: 5px;
+}
+
+.children-skeleton-button {
+    width: 50px;
+    height: 30px;
+
 }
 
 .children-skeleton-name {
-    background-color: rgba(240, 240, 240, 0.8);
     width: 80%;
     height: 30px;
-    margin: 2px;
-    border-radius: 5px;
 }
 
 .children-skeleton-picture {
-    background-color: rgba(240, 240, 240, 0.8);
     width: 100px;
     height: 100px;
-    margin: 2px;
-    border-radius: 5px;
 }
 
 .children-skeleton-child-container {

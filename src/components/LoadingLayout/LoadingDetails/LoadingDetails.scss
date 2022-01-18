@@ -8,49 +8,43 @@
     overflow: hidden;
 }
 
+.details-skeleton-general {
+    background-color: rgba(240, 240, 240, 0.8);
+    margin: 2px;
+    border-radius: 5px;
+}
+
 .details-skeleton-container {
     background-color: white;
     border-radius: 5px;
 }
 
 .details-skeleton-button {
-    background-color: rgba(240, 240, 240, 0.8);
     width: 50px;
     height: 30px;
-    margin: 2px;
-    border-radius: 5px;
 }
 
 .details-skeleton-main-descriptor {
-    background-color: rgba(240, 240, 240, 0.8);
     width: 80%;
     height: 30px;
-    margin: 2px;
-    border-radius: 5px;
 }
 
 .details-skeleton-image-placeholder {
-    background-color: rgba(240, 240, 240, 0.8);
     min-width: 100%;
     min-height: 116px;
-    margin: 5px;
-    border-radius: 5px;
 }
 
 .details-skeleton-second-descriptor {
-    background-color: rgba(240, 240, 240, 0.8);
     width: 50%;
     height: 20px;
-    margin: 2px;
-    border-radius: 5px;
 }
 
-.loading {
+.details-skeleton-loading {
     position: relative;
     overflow: hidden;
 }
 
-.loading::after {
+.details-skeleton-loading::after {
     position: absolute;
     display: block;
     content: "";

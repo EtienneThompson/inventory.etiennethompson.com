@@ -10,22 +10,22 @@ export const LoadingDetails: FunctionComponent<LoadingDetailsProps> = (
     <Row>
       <Col className="details-skeleton-container">
         <Row justify="end">
-          <div className="details-skeleton-button loading"></div>
-          <div className="details-skeleton-button loading"></div>
-          <div className="details-skeleton-button loading"></div>
+          <div className="details-skeleton-general details-skeleton-button details-skeleton-loading"></div>
+          <div className="details-skeleton-general details-skeleton-button details-skeleton-loading"></div>
+          <div className="details-skeleton-general details-skeleton-button details-skeleton-loading"></div>
         </Row>
         <Row>
           <Col cols={1}>
             <Row>
               <Col align="start" cols={1}>
-                <div className="details-skeleton-main-descriptor loading"></div>
-                <div className="details-skeleton-main-descriptor loading"></div>
+                <div className="details-skeleton-general details-skeleton-main-descriptor details-skeleton-loading"></div>
+                <div className="details-skeleton-general details-skeleton-main-descriptor details-skeleton-loading"></div>
               </Col>
             </Row>
             <Row>
               <Col align="start">
-                <div className="details-skeleton-second-descriptor loading"></div>
-                <div className="details-skeleton-second-descriptor loading"></div>
+                <div className="details-skeleton-general details-skeleton-second-descriptor details-skeleton-loading"></div>
+                <div className="details-skeleton-general details-skeleton-second-descriptor details-skeleton-loading"></div>
               </Col>
             </Row>
           </Col>
