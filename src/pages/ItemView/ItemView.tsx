@@ -4,10 +4,10 @@ import { useNavigate } from "react-router";
 import { useParams } from "react-router-dom";
 import { Button } from "../../components/common/Button";
 import { Container, Row } from "../../components/common/Grid";
+import { LoadingDetails } from "../../components/LoadingLayout";
 import api from "../../api";
 import { setIsLoading } from "../../store/actions";
 import { InventoryStore } from "../../store/types";
-import { LoadingSpinner } from "../../components/common/LoadingSpinner";
 import { ElementDetails } from "../../components/ElementDetails/ElementDetails";
 import { ItemProps, ItemDetails } from "./ItemView.types";
 import "./ItemView.scss";
@@ -72,7 +72,7 @@ export const ItemView: FunctionComponent<ItemProps> = (props: ItemProps) => {
         )}
         <h2>Item #{params.itemid}</h2>
       </Row>
-      {isLoading && <LoadingSpinner />}
+      {isLoading && <LoadingDetails />}
       {!isLoading && item && (
         <ElementDetails
           memo={props.memo}
