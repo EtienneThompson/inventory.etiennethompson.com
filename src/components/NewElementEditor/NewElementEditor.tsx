@@ -39,13 +39,6 @@ export const NewElementEditor: FunctionComponent<NewElementEditorProps> = (
     formData.append("name", name);
     formData.append("description", description);
     formData.append("parent_folder", props.parent);
-    // Format data and send API request to create element.
-    const createElementRequest = {
-      name: name,
-      description: description,
-      picture: picture,
-      parent_folder: props.parent,
-    };
 
     api
       .post(`/inventory/${elementTypes[elementTypeIndex]}/create`, formData, {
@@ -66,7 +59,7 @@ export const NewElementEditor: FunctionComponent<NewElementEditorProps> = (
   };
 
   return (
-    <Row>
+    <Row className="new-element-container">
       <Col className="new-element-overlay">
         {errorMessage && <ErrorMessage message={errorMessage} />}
         {isCreating && (

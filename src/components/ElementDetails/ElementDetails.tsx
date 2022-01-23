@@ -157,9 +157,25 @@ export const ElementDetails: FunctionComponent<ElementDetailsProps> = (
                 />
               )}
             </Row>
+            <Row>
+              <Col align="start">
+                <p className="element-time">
+                  Created: {props.element.created}
+                </p>
+                <p className="element-time">
+                  Updated: {props.element.updated}
+                </p>
+              </Col>
+            </Row>
           </Col>
           <Col align="center" cols={4}>
-            {!editing && <div>Picture: {props.element.picture}</div>}
+            {!editing && (
+              <img
+                className="image-details"
+                alt="temp"
+                src={props.element.picture}
+              />
+            )}
             {editing && (
               <input
                 type="file"
@@ -169,12 +185,6 @@ export const ElementDetails: FunctionComponent<ElementDetailsProps> = (
                 }}
               />
             )}
-          </Col>
-        </Row>
-        <Row>
-          <Col align="start">
-            <p className="element-time">Created: {props.element.created}</p>
-            <p className="element-time">Updated: {props.element.updated}</p>
           </Col>
         </Row>
       </Col>

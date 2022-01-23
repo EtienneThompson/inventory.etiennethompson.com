@@ -135,7 +135,7 @@ export const FolderView: FunctionComponent<FolderProps> = (
             parent={folder.folderid}
           />
           <Row>
-            <Col>
+            <Col className="child-container">
               {children &&
                 children.map((child, index) => (
                   <Row
@@ -158,7 +158,11 @@ export const FolderView: FunctionComponent<FolderProps> = (
                       </Row>
                     </Col>
                     <Col cols={4}>
-                      <div>Picture: {child.picture}</div>
+                      <img
+                        className="child-image"
+                        alt="temp"
+                        src={child.picture}
+                      />
                     </Col>
                   </Row>
                 ))}
