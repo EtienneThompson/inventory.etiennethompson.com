@@ -6,6 +6,7 @@ import { ElementDetailsProps, DeleteRequest } from "./ElementDetails.types";
 import api from "../../api";
 import { LoadingSpinner } from "../common/LoadingSpinner";
 import "./ElementDetails.scss";
+import { ErrorMessage } from "../common/ErrorMessage";
 
 export const ElementDetails: FunctionComponent<ElementDetailsProps> = (
   props: ElementDetailsProps
@@ -16,6 +17,7 @@ export const ElementDetails: FunctionComponent<ElementDetailsProps> = (
   const [editedDesc, setEditedDesc] = React.useState("");
   const [editedPict, setEditedPict] = React.useState<any>(null);
   const [isWaiting, setIsWaiting] = React.useState(false);
+  const [errorMessage, setErrorMessage] = React.useState("");
 
   React.useEffect(() => {
     setEditedName(props.element.name);
@@ -41,6 +43,7 @@ export const ElementDetails: FunctionComponent<ElementDetailsProps> = (
     api
       .delete(`/inventory/${props.type}/delete`, { data: deleteData })
       .then((response) => {
+        setErrorMessage("");
         // Since the item no longer exists, navigate the user back to the
         // parent folder.
         setIsWaiting(false);
@@ -49,7 +52,7 @@ export const ElementDetails: FunctionComponent<ElementDetailsProps> = (
         navigate(`/folder/${props.element.parent_folder}?force_update=true`);
       })
       .catch((error) => {
-        console.log(error);
+        setErrorMessage(`Failed to delete the ${props.type}.`);
         setIsWaiting(false);
       });
   };
@@ -77,6 +80,7 @@ export const ElementDetails: FunctionComponent<ElementDetailsProps> = (
         },
       })
       .then((response) => {
+        setErrorMessage("");
         props.updateElement(editedName, editedDesc, editedPict);
         // Fetch the cached parent from the cache.
         let cachedParent = props.memo.retrieveFromMemo(
@@ -99,7 +103,7 @@ export const ElementDetails: FunctionComponent<ElementDetailsProps> = (
         setIsWaiting(false);
       })
       .catch((error) => {
-        console.log(error);
+        setErrorMessage("Couldn't update the item.");
         resetFields();
         setEditing(false);
         setIsWaiting(false);
@@ -109,6 +113,7 @@ export const ElementDetails: FunctionComponent<ElementDetailsProps> = (
   return (
     <Row>
       <Col className="element-details-overlay">
+        {errorMessage && <ErrorMessage message={errorMessage} />}
         {isWaiting && (
           <div className="element-details-loading-area">
             <LoadingSpinner />

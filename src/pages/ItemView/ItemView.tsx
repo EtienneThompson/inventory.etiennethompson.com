@@ -5,6 +5,7 @@ import { useParams } from "react-router-dom";
 import { Button } from "../../components/common/Button";
 import { Container, Row } from "../../components/common/Grid";
 import { LoadingDetails } from "../../components/LoadingLayout";
+import { ErrorMessage } from "../../components/common/ErrorMessage";
 import api from "../../api";
 import { setIsLoading } from "../../store/actions";
 import { InventoryStore } from "../../store/types";
@@ -18,6 +19,7 @@ export const ItemView: FunctionComponent<ItemProps> = (props: ItemProps) => {
   const params = useParams();
 
   const [item, setItem] = React.useState<ItemDetails | undefined>(undefined);
+  const [errorMessage, setErrorMessgage] = React.useState("");
 
   const isLoading = useSelector((state: InventoryStore) => state.isLoading);
 
@@ -43,7 +45,7 @@ export const ItemView: FunctionComponent<ItemProps> = (props: ItemProps) => {
           dispatch(setIsLoading(false));
         })
         .catch((error) => {
-          console.log(error);
+          setErrorMessgage("Failed to fetch item data.");
           dispatch(setIsLoading(false));
         });
     }
@@ -72,6 +74,7 @@ export const ItemView: FunctionComponent<ItemProps> = (props: ItemProps) => {
         )}
         <h2>Item #{params.itemid}</h2>
       </Row>
+      {errorMessage && <ErrorMessage message={errorMessage} />}
       {isLoading && <LoadingDetails />}
       {!isLoading && item && (
         <ElementDetails

@@ -15,8 +15,9 @@ import { setIsLoading } from "../../store/actions";
 import { InventoryStore } from "../../store/types";
 import { FolderProps, FolderDetails, ChildDetails } from "./FolderView.types";
 import api from "../../api";
-import "./FolderView.scss";
 import { extractQueryParam } from "../../utils/window";
+import "./FolderView.scss";
+import { ErrorMessage } from "../../components/common/ErrorMessage";
 
 export const FolderView: FunctionComponent<FolderProps> = (
   props: FolderProps
@@ -31,6 +32,7 @@ export const FolderView: FunctionComponent<FolderProps> = (
   const [children, setChildren] = React.useState<ChildDetails[] | undefined>(
     undefined
   );
+  const [errorMessage, setErrorMessage] = React.useState("");
 
   const isLoading = useSelector((state: InventoryStore) => state.isLoading);
 
@@ -54,13 +56,14 @@ export const FolderView: FunctionComponent<FolderProps> = (
       api
         .get(`/inventory/folder?folderid=${params.folderid}`)
         .then((response) => {
+          setErrorMessage("");
           if (folderid) props.memo.addToMemo(folderid, response.data.folder);
           setFolder(response.data.folder);
           setChildren(response.data.folder.children);
           dispatch(setIsLoading(false));
         })
         .catch((error) => {
-          console.log(error);
+          setErrorMessage("Couldn't fetch the folder data.");
           dispatch(setIsLoading(false));
         });
     }
@@ -109,6 +112,7 @@ export const FolderView: FunctionComponent<FolderProps> = (
         )}
         <h2>Folder #{params.folderid}</h2>
       </Row>
+      {errorMessage && <ErrorMessage message={errorMessage} />}
       {isLoading && (
         <Row>
           <Col>

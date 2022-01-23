@@ -6,6 +6,7 @@ import { NewElementEditorProps } from "./NewElementEditor.types";
 import api from "../../api";
 import "./NewElementEditor.scss";
 import { LoadingSpinner } from "../common/LoadingSpinner";
+import { ErrorMessage } from "../common/ErrorMessage";
 
 export const NewElementEditor: FunctionComponent<NewElementEditorProps> = (
   props: NewElementEditorProps
@@ -18,6 +19,7 @@ export const NewElementEditor: FunctionComponent<NewElementEditorProps> = (
   const [picture, setPicture] = React.useState<any>(null);
   const [elementTypeIndex, setElementTypeIndex] = React.useState(0);
   const [isCreating, setIsCreating] = React.useState(false);
+  const [errorMessage, setErrorMessage] = React.useState("");
 
   const resetFields = () => {
     setName("");
@@ -45,12 +47,15 @@ export const NewElementEditor: FunctionComponent<NewElementEditorProps> = (
         newElement: createElementRequest,
       })
       .then((response) => {
+        setErrorMessage("");
         props.onCreateSuccess(response.data.createdElement);
         setIsCreating(false);
         resetFields();
       })
       .catch((error) => {
-        console.log(error);
+        setErrorMessage(
+          `Couldn't create the ${elementTypes[elementTypeIndex]}.`
+        );
         setIsCreating(false);
       });
   };
@@ -58,6 +63,7 @@ export const NewElementEditor: FunctionComponent<NewElementEditorProps> = (
   return (
     <Row>
       <Col className="new-element-overlay">
+        {errorMessage && <ErrorMessage message={errorMessage} />}
         {isCreating && (
           <div className="new-element-loading-area">
             <LoadingSpinner />
