@@ -39,6 +39,7 @@ export const ItemView: FunctionComponent<ItemProps> = (props: ItemProps) => {
       api
         .get(`/inventory/item?itemid=${params.itemid}`)
         .then((response) => {
+          setErrorMessgage("");
           if (params.itemid)
             props.memo.addToMemo(params.itemid, response.data.item);
           setItem(response.data.item);
