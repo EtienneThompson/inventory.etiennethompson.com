@@ -15,7 +15,10 @@ export const LoadingChildren: FunctionComponent<LoadingChildrenProps> = (
         <Row>
           <Col>
             {[1, 2, 3].map((child, index) => (
-              <Row className="children-skeleton-child-container">
+              <Row
+                key={`loading-child-${index}`}
+                className="children-skeleton-child-container"
+              >
                 <Col align="start" cols={1}>
                   <div className="children-skeleton-general children-skeleton-name children-loading"></div>
                 </Col>
