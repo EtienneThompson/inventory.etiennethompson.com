@@ -17,14 +17,22 @@ instance.interceptors.request.use(
       req.params.clientid = store.getState().clientId;
     } else {
       let data;
+      console.log(req.data instanceof FormData);
       if (typeof req.data === "string") {
         data = JSON.parse(req.data);
+      } else if (req.data instanceof FormData) {
+        data = req.data;
+        data.append("appid", process.env.REACT_APP_APPLICATION_ID as string);
+        data.append("clientid", store.getState().clientId as string);
+        console.log(req.data);
+        return req;
       } else {
         data = req.data;
       }
       data.appid = process.env.REACT_APP_APPLICATION_ID;
       data.clientid = store.getState().clientId;
       req.data = data;
+      console.log(req);
     }
     return req;
   },
@@ -46,7 +54,7 @@ instance.interceptors.response.use(
       store.dispatch(logout());
       return (window.location.href = "/logout?reason=1");
     } else if (err.response.status === 401) {
-      return (window.location.href = "/logout?reason=0");
+      // return (window.location.href = "/logout?reason=0");
     }
     return Promise.reject(err);
   }

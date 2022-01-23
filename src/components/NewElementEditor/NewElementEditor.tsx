@@ -34,6 +34,11 @@ export const NewElementEditor: FunctionComponent<NewElementEditorProps> = (
 
   const onDoneButtonClicked = () => {
     setIsCreating(true);
+    const formData = new FormData();
+    formData.append("file", picture);
+    formData.append("name", name);
+    formData.append("description", description);
+    formData.append("parent_folder", props.parent);
     // Format data and send API request to create element.
     const createElementRequest = {
       name: name,
@@ -43,8 +48,8 @@ export const NewElementEditor: FunctionComponent<NewElementEditorProps> = (
     };
 
     api
-      .post(`/inventory/${elementTypes[elementTypeIndex]}/create`, {
-        newElement: createElementRequest,
+      .post(`/inventory/${elementTypes[elementTypeIndex]}/create`, formData, {
+        headers: { "Content-Type": "multipart/form-data" },
       })
       .then((response) => {
         setErrorMessage("");
