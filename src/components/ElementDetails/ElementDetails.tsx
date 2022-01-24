@@ -68,16 +68,19 @@ export const ElementDetails: FunctionComponent<ElementDetailsProps> = (
 
   const onDoneButtonClicked = () => {
     setIsWaiting(true);
+    let formData = new FormData();
+    formData.append("file", editedPict);
+    formData.append(
+      "id",
+      (!!props.element.folderid
+        ? props.element.folderid
+        : props.element.itemid) as string
+    );
+    formData.append("name", editedName);
+    formData.append("description", editedDesc);
     api
-      .put(`/inventory/${props.type}/update`, {
-        data: {
-          id: !!props.element.folderid
-            ? props.element.folderid
-            : props.element.itemid,
-          name: editedName,
-          description: editedDesc,
-          picture: editedPict,
-        },
+      .put(`/inventory/${props.type}/update`, formData, {
+        headers: { "Content-Type": "multipart/form-data" },
       })
       .then((response) => {
         setErrorMessage("");

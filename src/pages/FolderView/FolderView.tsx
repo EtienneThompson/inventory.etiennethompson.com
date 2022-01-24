@@ -104,7 +104,7 @@ export const FolderView: FunctionComponent<FolderProps> = (
 
   return (
     <Container className="folder-view-container">
-      <Row>
+      <Row className="folder-view-row">
         {folder && folder.parent_folder && (
           <Button onClick={() => navigate(`/folder/${folder?.parent_folder}`)}>
             Back
@@ -122,20 +122,24 @@ export const FolderView: FunctionComponent<FolderProps> = (
         </Row>
       )}
       {!isLoading && folder && (
-        <Col>
-          <ElementDetails
-            memo={props.memo}
-            element={folder}
-            type={"folder"}
-            updateElement={updateFolder}
-            numChildren={folder.children.length}
-          />
-          <NewElementEditor
-            onCreateSuccess={addNewElement}
-            parent={folder.folderid}
-          />
-          <Row>
-            <Col className="child-container">
+        <Col className="test">
+          <div className="folder-view-row">
+            <ElementDetails
+              memo={props.memo}
+              element={folder}
+              type={"folder"}
+              updateElement={updateFolder}
+              numChildren={folder.children.length}
+            />
+          </div>
+          <div className="folder-view-row">
+            <NewElementEditor
+              onCreateSuccess={addNewElement}
+              parent={folder.folderid}
+            />
+          </div>
+          <div className="folder-view-overflow">
+            <Col>
               {children &&
                 children.map((child, index) => (
                   <Row
@@ -167,7 +171,8 @@ export const FolderView: FunctionComponent<FolderProps> = (
                   </Row>
                 ))}
             </Col>
-          </Row>
+          </div>
+          <div className="folder-view-footer"></div>
         </Col>
       )}
     </Container>

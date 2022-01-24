@@ -1,5 +1,32 @@
+.test {
+    height: calc(100% - 70px);
+    display: flex;
+    flex-flow: column;
+}
+
 .folder-view-container {
     max-width: 800px;
+    height: 94%;
+    display: flex;
+    flex-flow: column;
+}
+
+.folder-view-row {
+    width: 100%;
+    flex: 0 1 auto;
+}
+
+.folder-view-overflow {
+    width: 100%;
+    display: flex;
+    flex-flow: column;
+    flex: 1 1 auto;
+    overflow-y: auto;
+    padding: 5px;
+}
+
+.folder-view-footer {
+    flex: 0 1 5px;
 }
 
 .folder-child {
@@ -26,7 +53,6 @@
 
 .child-container {
     width: 100%;
-    height: 290px;
     overflow-x: visible;
     overflow-y: scroll;
     padding: 5px;
