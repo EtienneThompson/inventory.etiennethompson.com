@@ -30,7 +30,7 @@ export const LoadingDetails: FunctionComponent<LoadingDetailsProps> = (
             </Row>
           </Col>
           <Col cols={4}>
-            <div className="details-skeleton-image-placeholder loading"></div>
+            <div className="details-skeleton-general details-skeleton-image-placeholder details-skeleton-loading"></div>
           </Col>
         </Row>
       </Col>
