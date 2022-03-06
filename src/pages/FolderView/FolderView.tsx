@@ -9,6 +9,7 @@ import {
   LoadingDetails,
 } from "../../components/LoadingLayout";
 import { ElementDetails } from "../../components/ElementDetails";
+import { ErrorMessage } from "../../components/common/ErrorMessage";
 import { NewElementEditor } from "../../components/NewElementEditor";
 import { AiFillFolder, AiFillInfoCircle } from "react-icons/ai";
 import { setIsLoading } from "../../store/actions";
@@ -16,8 +17,8 @@ import { InventoryStore } from "../../store/types";
 import { FolderProps, FolderDetails, ChildDetails } from "./FolderView.types";
 import api from "../../api";
 import { extractQueryParam } from "../../utils/window";
+import placeholderImage from "../../assets/images/photo-placeholder.png";
 import "./FolderView.scss";
-import { ErrorMessage } from "../../components/common/ErrorMessage";
 
 export const FolderView: FunctionComponent<FolderProps> = (
   props: FolderProps
@@ -164,8 +165,8 @@ export const FolderView: FunctionComponent<FolderProps> = (
                     <Col cols={4}>
                       <img
                         className="child-image"
-                        alt="temp"
-                        src={child.picture}
+                        alt="Nothing pictured"
+                        src={child.picture ? child.picture : placeholderImage}
                       />
                     </Col>
                   </Row>
