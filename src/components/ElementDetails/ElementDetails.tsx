@@ -2,11 +2,12 @@ import React, { FunctionComponent } from "react";
 import { useNavigate } from "react-router";
 import { Button } from "../common/Button";
 import { Row, Col } from "../common/Grid";
+import { ErrorMessage } from "../common/ErrorMessage";
+import { LoadingSpinner } from "../common/LoadingSpinner";
 import { ElementDetailsProps, DeleteRequest } from "./ElementDetails.types";
 import api from "../../api";
-import { LoadingSpinner } from "../common/LoadingSpinner";
+import placeholderImage from "../../assets/images/photo-placeholder.png";
 import "./ElementDetails.scss";
-import { ErrorMessage } from "../common/ErrorMessage";
 
 export const ElementDetails: FunctionComponent<ElementDetailsProps> = (
   props: ElementDetailsProps
@@ -177,8 +178,12 @@ export const ElementDetails: FunctionComponent<ElementDetailsProps> = (
             {!editing && (
               <img
                 className="image-details"
-                alt="temp"
-                src={props.element.picture}
+                alt="Nothing pictured"
+                src={
+                  props.element.picture
+                    ? props.element.picture
+                    : placeholderImage
+                }
               />
             )}
             {editing && (
