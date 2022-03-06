@@ -84,7 +84,8 @@ export const ElementDetails: FunctionComponent<ElementDetailsProps> = (
       })
       .then((response) => {
         setErrorMessage("");
-        props.updateElement(editedName, editedDesc, editedPict);
+        console.log(response);
+        props.updateElement(editedName, editedDesc, response.data.picture);
         // Fetch the cached parent from the cache.
         let cachedParent = props.memo.retrieveFromMemo(
           props.element.parent_folder
@@ -99,7 +100,7 @@ export const ElementDetails: FunctionComponent<ElementDetailsProps> = (
           )[0];
           // Update it's fields and update the cache.
           updatedChild.name = editedName;
-          updatedChild.picture = editedPict;
+          updatedChild.picture = response.data.picture;
           props.memo.addToMemo(props.element.parent_folder, cachedParent);
         }
         // Reset UI fields.
