@@ -84,7 +84,6 @@ export const ElementDetails: FunctionComponent<ElementDetailsProps> = (
       })
       .then((response) => {
         setErrorMessage("");
-        console.log(response);
         props.updateElement(editedName, editedDesc, response.data.picture);
         // Fetch the cached parent from the cache.
         let cachedParent = props.memo.retrieveFromMemo(
@@ -109,7 +108,6 @@ export const ElementDetails: FunctionComponent<ElementDetailsProps> = (
         setIsWaiting(false);
       })
       .catch((error) => {
-        console.log(error);
         setErrorMessage("Couldn't update the item.");
         resetFields();
         setEditing(false);
