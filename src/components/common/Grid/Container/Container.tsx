@@ -6,7 +6,10 @@ export const Container: FunctionComponent<ContainerProps> = (
   props: ContainerProps
 ) => {
   return (
-    <div className={`container-container ${props.className}`}>
+    <div
+      className={`container-container ${props.className}`}
+      onClick={() => props.onClick && props.onClick()}
+    >
       {props.children}
     </div>
   );
