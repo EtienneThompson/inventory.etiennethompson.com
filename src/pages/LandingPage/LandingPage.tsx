@@ -37,7 +37,7 @@ export const LandingPage = () => {
         console.log(error);
         dispatch(setIsLoading(false));
       });
-  }, []);
+  }, [dispatch, isLoggedIn]);
 
   const onBaseFolderClicked = () => {
     if (!folder) {
