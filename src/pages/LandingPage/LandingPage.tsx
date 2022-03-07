@@ -23,6 +23,7 @@ export const LandingPage = () => {
   React.useEffect(() => {
     dispatch(setIsLoading(true));
     if (!isLoggedIn) {
+      dispatch(setIsLoading(false));
       return;
     }
 
