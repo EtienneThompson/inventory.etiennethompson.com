@@ -90,7 +90,12 @@ export const FolderView: FunctionComponent<FolderProps> = (
     props.memo.addToMemo(newCacheFolder.folderid, newCacheFolder);
   };
 
-  const updateFolder = (newName: string, newDesc: string, newPict: any) => {
+  const updateFolder = (
+    newName: string,
+    newDesc: string,
+    newPict: any,
+    updated: string
+  ) => {
     if (!folder) {
       return;
     }
@@ -98,6 +103,7 @@ export const FolderView: FunctionComponent<FolderProps> = (
     newFolder.name = newName;
     newFolder.description = newDesc;
     newFolder.picture = newPict;
+    newFolder.updated = updated;
     setFolder(newFolder);
     // Update the cache when a folder is edited.
     props.memo.addToMemo(newFolder.folderid, newFolder);

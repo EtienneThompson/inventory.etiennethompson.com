@@ -52,7 +52,12 @@ export const ItemView: FunctionComponent<ItemProps> = (props: ItemProps) => {
     }
   }, [dispatch, params.itemid, props.memo]);
 
-  const updateItem = (newName: string, newDesc: string, newPict: string) => {
+  const updateItem = (
+    newName: string,
+    newDesc: string,
+    newPict: string,
+    updated: string
+  ) => {
     if (!item) {
       return;
     }
@@ -60,6 +65,7 @@ export const ItemView: FunctionComponent<ItemProps> = (props: ItemProps) => {
     newItem.name = newName;
     newItem.description = newDesc;
     newItem.picture = newPict;
+    newItem.updated = updated;
     setItem(newItem);
     // Update the cache when fields are edited.
     props.memo.addToMemo(newItem.itemid, newItem);

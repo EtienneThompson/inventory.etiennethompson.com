@@ -85,7 +85,12 @@ export const ElementDetails: FunctionComponent<ElementDetailsProps> = (
       })
       .then((response) => {
         setErrorMessage("");
-        props.updateElement(editedName, editedDesc, response.data.picture);
+        props.updateElement(
+          editedName,
+          editedDesc,
+          response.data.picture,
+          response.data.updated
+        );
         // Fetch the cached parent from the cache.
         let cachedParent = props.memo.retrieveFromMemo(
           props.element.parent_folder
