@@ -4,7 +4,12 @@ export interface ElementDetailsProps {
   memo: Memo;
   element: ElementComponents;
   type: string;
-  updateElement: (newName: string, newDesc: string, newPict: string) => void;
+  updateElement: (
+    newName: string,
+    newDesc: string,
+    newPict: string,
+    updated: string
+  ) => void;
   numChildren?: number;
 }
 
