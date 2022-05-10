@@ -12,6 +12,7 @@ import reportWebVitals from "./reportWebVitals";
 import { store } from "./store/store";
 import Memo from "./utils/memoization";
 import "./index.scss";
+import { Error404 } from "./pages/404Error";
 
 // Instantiate global memo object that can be passed to pages as needed.
 let memo = new Memo();
@@ -29,6 +30,7 @@ ReactDOM.render(
             path="folder/:folderid"
             element={<FolderView memo={memo} />}
           />
+          <Route path="*" element={<Error404 />} />
         </Route>
       </Routes>
     </BrowserRouter>
