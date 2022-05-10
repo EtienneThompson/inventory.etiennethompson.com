@@ -21,10 +21,10 @@ export const Toolbar: FunctionComponent<ToolbarProps> = (
   return (
     <div className="toolbar-container">
       <Row>
-        <Col cols={2} align="start">
-          <div className="title">Etienne Thompson Inventory</div>
+        <Col cols={1} align="start">
+          <div className="title">Inventory System</div>
         </Col>
-        <Col cols={2} align="end">
+        <Col cols={3} align="end">
           {isLoggedIn ? (
             <Button onClick={props.onLogoutButtonClicked}>Logout</Button>
           ) : (

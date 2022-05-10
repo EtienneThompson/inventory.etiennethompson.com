@@ -18,6 +18,15 @@ Let's say you have a box of yarn in your bedroom closet. An example hierarchy yo
 
 When traversing your system later, it will be a lot easier to know where the red yarn is because it's been organized within the system.
 
+## Technologies:
+
+- Typescript
+- React
+- React-Router
+- React-Redux
+- Axios
+- Sass
+
 ## Getting Started
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
