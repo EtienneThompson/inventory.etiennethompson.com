@@ -3,7 +3,7 @@ import { Col } from "../../components/common/Grid";
 import "./404Error.scss";
 
 export const Error404 = () => {
-  document.title = "Etienne Thompson - Admin Center";
+  document.title = "Etienne Thompson - Inventory System";
   document.documentElement.className = "theme-light";
 
   return (
