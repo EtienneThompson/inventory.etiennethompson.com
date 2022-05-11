@@ -11,6 +11,9 @@ import placeholderImage from "../../assets/images/photo-placeholder.png";
 import "./LandingPage.scss";
 
 export const LandingPage = () => {
+  document.title = "Etienne Thompson - Inventory System - Home";
+  document.documentElement.className = "theme-light";
+
   const [folder, setFolder] = React.useState<FolderDetails | undefined>(
     undefined
   );
