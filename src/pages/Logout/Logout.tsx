@@ -4,6 +4,9 @@ import { LogoutReasons } from "./Logout.types";
 import { extractQueryParam } from "../../utils/window";
 
 export const Logout = () => {
+  document.title = "Etienne Thompson - Inventory System - Logout";
+  document.documentElement.className = "theme-light";
+
   const [reason, setReason] = React.useState(0);
 
   const logoutReasons: LogoutReasons = {

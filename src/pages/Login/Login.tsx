@@ -7,6 +7,9 @@ import { login, setIsLoading } from "../../store/actions";
 import { extractQueryParam } from "../../utils/window";
 
 export const Login = () => {
+  document.title = "Etienne Thompson - Inventory System - Login";
+  document.documentElement.className = "theme-light";
+
   const dispatch = useDispatch();
   const navigate = useNavigate();
 

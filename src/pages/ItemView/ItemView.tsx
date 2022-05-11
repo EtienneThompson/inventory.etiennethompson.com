@@ -14,6 +14,9 @@ import { ItemProps, ItemDetails } from "./ItemView.types";
 import "./ItemView.scss";
 
 export const ItemView: FunctionComponent<ItemProps> = (props: ItemProps) => {
+  document.title = "Etienne Thompson - Inventory System - Item";
+  document.documentElement.className = "theme-light";
+
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const params = useParams();

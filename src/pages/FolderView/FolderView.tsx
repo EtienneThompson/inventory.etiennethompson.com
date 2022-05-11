@@ -23,6 +23,9 @@ import "./FolderView.scss";
 export const FolderView: FunctionComponent<FolderProps> = (
   props: FolderProps
 ) => {
+  document.title = "Etienne Thompson - Inventory System - Folder";
+  document.documentElement.className = "theme-light";
+
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const params = useParams();
