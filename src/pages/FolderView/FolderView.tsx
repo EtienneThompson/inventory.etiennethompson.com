@@ -20,8 +20,6 @@ import api from "../../api";
 import { extractQueryParam } from "../../utils/window";
 import placeholderImage from "../../assets/images/photo-placeholder.png";
 import "./FolderView.scss";
-import { readFromLocalStorage } from "../../utils/localStorage";
-import { LocalStorageKey } from "../../types";
 
 export const FolderView: FunctionComponent<FolderProps> = (
   props: FolderProps
@@ -135,7 +133,11 @@ export const FolderView: FunctionComponent<FolderProps> = (
         <Breadcrumb
           names={breadcrumb[0]}
           values={breadcrumb[1]}
-          onNameClick={(name: string) => console.log(name)}
+          onNameClick={(value: string) =>
+            navigate(`/folder/${value}`, {
+              state: value,
+            })
+          }
         />
       </Row>
       {errorMessage && <ErrorMessage message={errorMessage} />}
