@@ -3,14 +3,15 @@ import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router";
 import { useNavigate } from "react-router";
 import { Button } from "../../components/common/Button";
+import { Breadcrumb } from "../../components/common/Breadcrumb";
+import { ElementDetails } from "../../components/ElementDetails";
 import { Container, Row, Col } from "../../components/common/Grid";
+import { ErrorMessage } from "../../components/common/ErrorMessage";
+import { NewElementEditor } from "../../components/NewElementEditor";
 import {
   LoadingChildren,
   LoadingDetails,
 } from "../../components/LoadingLayout";
-import { ElementDetails } from "../../components/ElementDetails";
-import { ErrorMessage } from "../../components/common/ErrorMessage";
-import { NewElementEditor } from "../../components/NewElementEditor";
 import { AiFillFolder, AiFillInfoCircle } from "react-icons/ai";
 import { setIsLoading } from "../../store/actions";
 import { InventoryStore } from "../../store/types";
@@ -114,13 +115,18 @@ export const FolderView: FunctionComponent<FolderProps> = (
 
   return (
     <Container className="folder-view-container">
-      <Row className="folder-view-row">
+      <Row className="folder-view-row" justify="start">
         {folder && folder.parent_folder && (
           <Button onClick={() => navigate(`/folder/${folder?.parent_folder}`)}>
             Back
           </Button>
         )}
-        <h2>Folder #{params.folderid}</h2>
+        {/* <h2>Folder #{params.folderid}</h2> */}
+        <Breadcrumb
+          names={["one", "two", "three"]}
+          values={["1", "2", "3"]}
+          onNameClick={(name: string) => console.log(name)}
+        />
       </Row>
       {errorMessage && <ErrorMessage message={errorMessage} />}
       {isLoading && (
