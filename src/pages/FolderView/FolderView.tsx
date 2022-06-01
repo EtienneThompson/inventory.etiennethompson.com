@@ -13,13 +13,15 @@ import {
   LoadingDetails,
 } from "../../components/LoadingLayout";
 import { AiFillFolder, AiFillInfoCircle } from "react-icons/ai";
-import { setIsLoading } from "../../store/actions";
+import { setIsLoading, updateBreadcrumb } from "../../store/actions";
 import { InventoryStore } from "../../store/types";
 import { FolderProps, FolderDetails, ChildDetails } from "./FolderView.types";
 import api from "../../api";
 import { extractQueryParam } from "../../utils/window";
 import placeholderImage from "../../assets/images/photo-placeholder.png";
 import "./FolderView.scss";
+import { readFromLocalStorage } from "../../utils/localStorage";
+import { LocalStorageKey } from "../../types";
 
 export const FolderView: FunctionComponent<FolderProps> = (
   props: FolderProps
@@ -40,6 +42,7 @@ export const FolderView: FunctionComponent<FolderProps> = (
   const [errorMessage, setErrorMessage] = React.useState("");
 
   const isLoading = useSelector((state: InventoryStore) => state.isLoading);
+  const breadcrumb = useSelector((state: InventoryStore) => state.breadcrumb);
 
   React.useEffect(() => {
     dispatch(setIsLoading(true));
@@ -53,9 +56,10 @@ export const FolderView: FunctionComponent<FolderProps> = (
     let cachedFolder = props.memo.retrieveFromMemo(folderid);
     if (cachedFolder && !force_update) {
       // If the element is in the cache, use that data.
-      dispatch(setIsLoading(false));
       setFolder(cachedFolder);
       setChildren(cachedFolder.children);
+      dispatch(updateBreadcrumb(cachedFolder.name, cachedFolder.folderid));
+      dispatch(setIsLoading(false));
     } else {
       // Otherwise, get the data from the database and then cache it.
       api
@@ -65,6 +69,12 @@ export const FolderView: FunctionComponent<FolderProps> = (
           if (folderid) props.memo.addToMemo(folderid, response.data.folder);
           setFolder(response.data.folder);
           setChildren(response.data.folder.children);
+          dispatch(
+            updateBreadcrumb(
+              response.data.folder.name,
+              response.data.folder.folderid
+            )
+          );
           dispatch(setIsLoading(false));
         })
         .catch((error) => {
@@ -123,8 +133,8 @@ export const FolderView: FunctionComponent<FolderProps> = (
         )}
         {/* <h2>Folder #{params.folderid}</h2> */}
         <Breadcrumb
-          names={["one", "two", "three"]}
-          values={["1", "2", "3"]}
+          names={breadcrumb[0]}
+          values={breadcrumb[1]}
           onNameClick={(name: string) => console.log(name)}
         />
       </Row>

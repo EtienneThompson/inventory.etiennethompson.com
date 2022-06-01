@@ -64,3 +64,33 @@ export const logout = (): AnyAction => {
   store.dispatch(updateIsAdmin(false));
   return setLoginStatus(false);
 };
+
+export const updateBreadcrumb = (name: string, value: string) => {
+  let currBreadcrumb = [...store.getState().breadcrumb];
+  if (
+    !currBreadcrumb[0].includes(name) &&
+    !currBreadcrumb[1].includes(value)
+  ) {
+    // Add the elements if they are not already in the breadcrumb trail.
+    currBreadcrumb[0].push(name);
+    currBreadcrumb[1].push(value);
+  } else if (
+    currBreadcrumb[0].includes(name) &&
+    currBreadcrumb[1].includes(value)
+  ) {
+    // Element is in the list, so need to pop from the breadcrumb until we have
+    // this element at the top.
+    while (
+      currBreadcrumb[0][currBreadcrumb[0].length - 1] !== name &&
+      currBreadcrumb[1][currBreadcrumb[1].length - 1] !== value
+    ) {
+      currBreadcrumb[0].pop();
+      currBreadcrumb[1].pop();
+    }
+  }
+
+  return {
+    type: "breadcrumb/set",
+    payload: currBreadcrumb,
+  };
+};

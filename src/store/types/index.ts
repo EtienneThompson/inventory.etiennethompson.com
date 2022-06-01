@@ -4,4 +4,5 @@ export type InventoryStore = {
   isUser: boolean;
   isAdmin: boolean;
   isLoggedIn: boolean;
+  breadcrumb: string[][];
 };

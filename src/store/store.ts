@@ -9,6 +9,7 @@ export const initialState: InventoryStore = {
   isUser: false,
   isAdmin: false,
   isLoggedIn: false,
+  breadcrumb: [[], []],
 };
 
 export const store = createStore(
