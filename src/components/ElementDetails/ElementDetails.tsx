@@ -140,42 +140,46 @@ export const ElementDetails: FunctionComponent<ElementDetailsProps> = (
         </Row>
         <Row>
           <Col align="start" cols={1}>
-            <Row justify="start">
-              <div className="details">Name:</div>
-              {!editing && <p className="details">{props.element.name}</p>}
-              {editing && (
-                <input
-                  type="text"
-                  value={editedName}
-                  onChange={(event: any) => {
-                    setEditedName(event.currentTarget.value);
-                  }}
-                />
-              )}
-            </Row>
-            <Row justify="start">
-              <div className="details">Description:</div>
-              {!editing && (
-                <p className="details">{props.element.description}</p>
-              )}
-              {editing && (
-                <input
-                  type="text"
-                  value={editedDesc}
-                  onChange={(event: any) => {
-                    setEditedDesc(event.currentTarget.value);
-                  }}
-                />
-              )}
+            <Row>
+              <Col className="details-section" align="start">
+                <div className="details-label">Name</div>
+                {!editing && <p className="details">{props.element.name}</p>}
+                {editing && (
+                  <input
+                    type="text"
+                    value={editedName}
+                    onChange={(event: any) => {
+                      setEditedName(event.currentTarget.value);
+                    }}
+                  />
+                )}
+              </Col>
             </Row>
             <Row>
+              <Col className="details-section" align="start">
+                <div className="details-label">Description</div>
+                {!editing && (
+                  <p className="details">{props.element.description}</p>
+                )}
+                {editing && (
+                  <input
+                    type="text"
+                    value={editedDesc}
+                    onChange={(event: any) => {
+                      setEditedDesc(event.currentTarget.value);
+                    }}
+                  />
+                )}
+              </Col>
+            </Row>
+            <Row>
+              <Col className="details-section" align="start">
+                <span className="details-label">Created</span>
+                <span className="element-time">{props.element.created}</span>
+              </Col>
               <Col align="start">
-                <p className="element-time">
-                  Created: {props.element.created}
-                </p>
-                <p className="element-time">
-                  Updated: {props.element.updated}
-                </p>
+                <span className="details-label">Updated</span>
+                <span className="element-time">{props.element.updated}</span>
               </Col>
             </Row>
           </Col>
