@@ -13,6 +13,7 @@ import { ElementDetails } from "../../components/ElementDetails/ElementDetails";
 import { ItemProps, ItemDetails } from "./ItemView.types";
 import "./ItemView.scss";
 import { Breadcrumb } from "../../components/common/Breadcrumb";
+import { BreadcrumbDetails } from "../../types";
 
 export const ItemView: FunctionComponent<ItemProps> = (props: ItemProps) => {
   document.title = "Etienne Thompson - Inventory System - Item";
@@ -24,9 +25,12 @@ export const ItemView: FunctionComponent<ItemProps> = (props: ItemProps) => {
 
   const [item, setItem] = React.useState<ItemDetails | undefined>(undefined);
   const [errorMessage, setErrorMessgage] = React.useState("");
+  const [breadcrumb, setBreadcrumb] = React.useState<
+    BreadcrumbDetails | undefined
+  >(undefined);
 
   const isLoading = useSelector((state: InventoryStore) => state.isLoading);
-  const breadcrumb = useSelector((state: InventoryStore) => state.breadcrumb);
+  // const breadcrumb = useSelector((state: InventoryStore) => state.breadcrumb);
 
   React.useEffect(() => {
     dispatch(setIsLoading(true));
@@ -37,8 +41,8 @@ export const ItemView: FunctionComponent<ItemProps> = (props: ItemProps) => {
     let cachedItem = props.memo.retrieveFromMemo(params.itemid);
     if (cachedItem) {
       // If the item is in the cache use that data.
-      setItem(cachedItem);
-      dispatch(updateBreadcrumb(cachedItem.name, cachedItem.value));
+      setItem(cachedItem.item);
+      setBreadcrumb(cachedItem.breadcrumb);
       dispatch(setIsLoading(false));
     } else {
       // Otherwise fetch data from the database and cache it.
@@ -47,14 +51,9 @@ export const ItemView: FunctionComponent<ItemProps> = (props: ItemProps) => {
         .then((response) => {
           setErrorMessgage("");
           if (params.itemid)
-            props.memo.addToMemo(params.itemid, response.data.item);
+            props.memo.addToMemo(params.itemid, response.data);
           setItem(response.data.item);
-          dispatch(
-            updateBreadcrumb(
-              response.data.item.name,
-              response.data.item.itemid
-            )
-          );
+          setBreadcrumb(response.data.breadcrumb);
           dispatch(setIsLoading(false));
         })
         .catch((error) => {
@@ -91,11 +90,16 @@ export const ItemView: FunctionComponent<ItemProps> = (props: ItemProps) => {
             Back
           </Button>
         )}
-        <Breadcrumb
-          names={breadcrumb[0]}
-          values={breadcrumb[1]}
-          onNameClick={(value: string) => navigate(`/folder/${value}`)}
-        />
+        {breadcrumb && (
+          <Breadcrumb
+            names={breadcrumb.names}
+            values={breadcrumb.values}
+            types={breadcrumb.types}
+            onNameClick={(value: string, type: string) =>
+              navigate(`/${type}/${value}`)
+            }
+          />
+        )}
       </Row>
       {errorMessage && <ErrorMessage message={errorMessage} />}
       {isLoading && <LoadingDetails />}

@@ -2,5 +2,6 @@ export interface BreadcrumbProps {
   className?: string;
   names: string[];
   values: string[];
-  onNameClick?: (value: string) => void;
+  types: string[];
+  onNameClick?: (value: string, type: string) => void;
 }

@@ -16,7 +16,8 @@ export const Breadcrumb: React.FunctionComponent<BreadcrumbProps> = (
             <div
               className="breadcrumb-item-name"
               onClick={() =>
-                props.onNameClick && props.onNameClick(props.values[index])
+                props.onNameClick &&
+                props.onNameClick(props.values[index], props.types[index])
               }
             >
               {name}

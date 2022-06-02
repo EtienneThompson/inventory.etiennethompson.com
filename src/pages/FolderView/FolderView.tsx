@@ -20,6 +20,7 @@ import api from "../../api";
 import { extractQueryParam } from "../../utils/window";
 import placeholderImage from "../../assets/images/photo-placeholder.png";
 import "./FolderView.scss";
+import { BreadcrumbDetails } from "../../types";
 
 export const FolderView: FunctionComponent<FolderProps> = (
   props: FolderProps
@@ -37,10 +38,12 @@ export const FolderView: FunctionComponent<FolderProps> = (
   const [children, setChildren] = React.useState<ChildDetails[] | undefined>(
     undefined
   );
+  const [breadcrumb, setBreadcrumb] = React.useState<
+    BreadcrumbDetails | undefined
+  >(undefined);
   const [errorMessage, setErrorMessage] = React.useState("");
 
   const isLoading = useSelector((state: InventoryStore) => state.isLoading);
-  const breadcrumb = useSelector((state: InventoryStore) => state.breadcrumb);
 
   React.useEffect(() => {
     dispatch(setIsLoading(true));
@@ -54,9 +57,9 @@ export const FolderView: FunctionComponent<FolderProps> = (
     let cachedFolder = props.memo.retrieveFromMemo(folderid);
     if (cachedFolder && !force_update) {
       // If the element is in the cache, use that data.
-      setFolder(cachedFolder);
-      setChildren(cachedFolder.children);
-      dispatch(updateBreadcrumb(cachedFolder.name, cachedFolder.folderid));
+      setFolder(cachedFolder.folder);
+      setChildren(cachedFolder.folder.children);
+      setBreadcrumb(cachedFolder.breadcrumb);
       dispatch(setIsLoading(false));
     } else {
       // Otherwise, get the data from the database and then cache it.
@@ -64,15 +67,10 @@ export const FolderView: FunctionComponent<FolderProps> = (
         .get(`/inventory/folder?folderid=${params.folderid}`)
         .then((response) => {
           setErrorMessage("");
-          if (folderid) props.memo.addToMemo(folderid, response.data.folder);
+          if (folderid) props.memo.addToMemo(folderid, response.data);
           setFolder(response.data.folder);
           setChildren(response.data.folder.children);
-          dispatch(
-            updateBreadcrumb(
-              response.data.folder.name,
-              response.data.folder.folderid
-            )
-          );
+          setBreadcrumb(response.data.breadcrumb);
           dispatch(setIsLoading(false));
         })
         .catch((error) => {
@@ -130,15 +128,16 @@ export const FolderView: FunctionComponent<FolderProps> = (
           </Button>
         )}
         {/* <h2>Folder #{params.folderid}</h2> */}
-        <Breadcrumb
-          names={breadcrumb[0]}
-          values={breadcrumb[1]}
-          onNameClick={(value: string) =>
-            navigate(`/folder/${value}`, {
-              state: value,
-            })
-          }
-        />
+        {breadcrumb && (
+          <Breadcrumb
+            names={breadcrumb.names}
+            values={breadcrumb.values}
+            types={breadcrumb.types}
+            onNameClick={(value: string, type: string) =>
+              navigate(`/${type}/${value}`)
+            }
+          />
+        )}
       </Row>
       {errorMessage && <ErrorMessage message={errorMessage} />}
       {isLoading && (
