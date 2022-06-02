@@ -84,7 +84,7 @@ export const ItemView: FunctionComponent<ItemProps> = (props: ItemProps) => {
 
   return (
     <Container className="item-view-container">
-      <Row>
+      <Row justify="start">
         {item && item.parent_folder && (
           <Button onClick={() => navigate(`/folder/${item.parent_folder}`)}>
             Back
