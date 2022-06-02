@@ -5,15 +5,15 @@ import { useParams } from "react-router-dom";
 import { Button } from "../../components/common/Button";
 import { Container, Row } from "../../components/common/Grid";
 import { LoadingDetails } from "../../components/LoadingLayout";
+import { Breadcrumb } from "../../components/common/Breadcrumb";
 import { ErrorMessage } from "../../components/common/ErrorMessage";
 import api from "../../api";
-import { setIsLoading, updateBreadcrumb } from "../../store/actions";
+import { setIsLoading } from "../../store/actions";
+import { BreadcrumbDetails } from "../../types";
 import { InventoryStore } from "../../store/types";
 import { ElementDetails } from "../../components/ElementDetails/ElementDetails";
 import { ItemProps, ItemDetails } from "./ItemView.types";
 import "./ItemView.scss";
-import { Breadcrumb } from "../../components/common/Breadcrumb";
-import { BreadcrumbDetails } from "../../types";
 
 export const ItemView: FunctionComponent<ItemProps> = (props: ItemProps) => {
   document.title = "Etienne Thompson - Inventory System - Item";

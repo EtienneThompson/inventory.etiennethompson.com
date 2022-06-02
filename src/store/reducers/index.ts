@@ -47,15 +47,6 @@ const setIsLoggedIn = (state: InventoryStore, action: AnyAction) => {
   return state.isLoggedIn;
 };
 
-const setBreadcrumb = (state: InventoryStore, action: AnyAction) => {
-  switch (action.type) {
-    case "breadcrumb/set":
-      return action.payload;
-  }
-
-  return state.breadcrumb;
-};
-
 export default function rootReducer(
   state: InventoryStore = initialState,
   action: AnyAction
@@ -66,6 +57,5 @@ export default function rootReducer(
     isUser: setIsUser(state, action),
     isAdmin: setIsAdmin(state, action),
     isLoggedIn: setIsLoggedIn(state, action),
-    breadcrumb: setBreadcrumb(state, action),
   };
 }

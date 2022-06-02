@@ -13,14 +13,14 @@ import {
   LoadingDetails,
 } from "../../components/LoadingLayout";
 import { AiFillFolder, AiFillInfoCircle } from "react-icons/ai";
-import { setIsLoading, updateBreadcrumb } from "../../store/actions";
+import { setIsLoading } from "../../store/actions";
+import { BreadcrumbDetails } from "../../types";
 import { InventoryStore } from "../../store/types";
 import { FolderProps, FolderDetails, ChildDetails } from "./FolderView.types";
 import api from "../../api";
 import { extractQueryParam } from "../../utils/window";
 import placeholderImage from "../../assets/images/photo-placeholder.png";
 import "./FolderView.scss";
-import { BreadcrumbDetails } from "../../types";
 
 export const FolderView: FunctionComponent<FolderProps> = (
   props: FolderProps
