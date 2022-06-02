@@ -5,9 +5,11 @@ import { useParams } from "react-router-dom";
 import { Button } from "../../components/common/Button";
 import { Container, Row } from "../../components/common/Grid";
 import { LoadingDetails } from "../../components/LoadingLayout";
+import { Breadcrumb } from "../../components/common/Breadcrumb";
 import { ErrorMessage } from "../../components/common/ErrorMessage";
 import api from "../../api";
 import { setIsLoading } from "../../store/actions";
+import { BreadcrumbDetails } from "../../types";
 import { InventoryStore } from "../../store/types";
 import { ElementDetails } from "../../components/ElementDetails/ElementDetails";
 import { ItemProps, ItemDetails } from "./ItemView.types";
@@ -23,8 +25,12 @@ export const ItemView: FunctionComponent<ItemProps> = (props: ItemProps) => {
 
   const [item, setItem] = React.useState<ItemDetails | undefined>(undefined);
   const [errorMessage, setErrorMessgage] = React.useState("");
+  const [breadcrumb, setBreadcrumb] = React.useState<
+    BreadcrumbDetails | undefined
+  >(undefined);
 
   const isLoading = useSelector((state: InventoryStore) => state.isLoading);
+  // const breadcrumb = useSelector((state: InventoryStore) => state.breadcrumb);
 
   React.useEffect(() => {
     dispatch(setIsLoading(true));
@@ -35,8 +41,9 @@ export const ItemView: FunctionComponent<ItemProps> = (props: ItemProps) => {
     let cachedItem = props.memo.retrieveFromMemo(params.itemid);
     if (cachedItem) {
       // If the item is in the cache use that data.
+      setItem(cachedItem.item);
+      setBreadcrumb(cachedItem.breadcrumb);
       dispatch(setIsLoading(false));
-      setItem(cachedItem);
     } else {
       // Otherwise fetch data from the database and cache it.
       api
@@ -44,8 +51,9 @@ export const ItemView: FunctionComponent<ItemProps> = (props: ItemProps) => {
         .then((response) => {
           setErrorMessgage("");
           if (params.itemid)
-            props.memo.addToMemo(params.itemid, response.data.item);
+            props.memo.addToMemo(params.itemid, response.data);
           setItem(response.data.item);
+          setBreadcrumb(response.data.breadcrumb);
           dispatch(setIsLoading(false));
         })
         .catch((error) => {
@@ -76,13 +84,22 @@ export const ItemView: FunctionComponent<ItemProps> = (props: ItemProps) => {
 
   return (
     <Container className="item-view-container">
-      <Row>
+      <Row justify="start">
         {item && item.parent_folder && (
           <Button onClick={() => navigate(`/folder/${item.parent_folder}`)}>
             Back
           </Button>
         )}
-        <h2>Item #{params.itemid}</h2>
+        {breadcrumb && (
+          <Breadcrumb
+            names={breadcrumb.names}
+            values={breadcrumb.values}
+            types={breadcrumb.types}
+            onNameClick={(value: string, type: string) =>
+              navigate(`/${type}/${value}`)
+            }
+          />
+        )}
       </Row>
       {errorMessage && <ErrorMessage message={errorMessage} />}
       {isLoading && <LoadingDetails />}

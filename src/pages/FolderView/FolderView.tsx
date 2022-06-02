@@ -3,16 +3,18 @@ import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router";
 import { useNavigate } from "react-router";
 import { Button } from "../../components/common/Button";
+import { Breadcrumb } from "../../components/common/Breadcrumb";
+import { ElementDetails } from "../../components/ElementDetails";
 import { Container, Row, Col } from "../../components/common/Grid";
+import { ErrorMessage } from "../../components/common/ErrorMessage";
+import { NewElementEditor } from "../../components/NewElementEditor";
 import {
   LoadingChildren,
   LoadingDetails,
 } from "../../components/LoadingLayout";
-import { ElementDetails } from "../../components/ElementDetails";
-import { ErrorMessage } from "../../components/common/ErrorMessage";
-import { NewElementEditor } from "../../components/NewElementEditor";
 import { AiFillFolder, AiFillInfoCircle } from "react-icons/ai";
 import { setIsLoading } from "../../store/actions";
+import { BreadcrumbDetails } from "../../types";
 import { InventoryStore } from "../../store/types";
 import { FolderProps, FolderDetails, ChildDetails } from "./FolderView.types";
 import api from "../../api";
@@ -36,6 +38,9 @@ export const FolderView: FunctionComponent<FolderProps> = (
   const [children, setChildren] = React.useState<ChildDetails[] | undefined>(
     undefined
   );
+  const [breadcrumb, setBreadcrumb] = React.useState<
+    BreadcrumbDetails | undefined
+  >(undefined);
   const [errorMessage, setErrorMessage] = React.useState("");
 
   const isLoading = useSelector((state: InventoryStore) => state.isLoading);
@@ -52,18 +57,20 @@ export const FolderView: FunctionComponent<FolderProps> = (
     let cachedFolder = props.memo.retrieveFromMemo(folderid);
     if (cachedFolder && !force_update) {
       // If the element is in the cache, use that data.
+      setFolder(cachedFolder.folder);
+      setChildren(cachedFolder.folder.children);
+      setBreadcrumb(cachedFolder.breadcrumb);
       dispatch(setIsLoading(false));
-      setFolder(cachedFolder);
-      setChildren(cachedFolder.children);
     } else {
       // Otherwise, get the data from the database and then cache it.
       api
         .get(`/inventory/folder?folderid=${params.folderid}`)
         .then((response) => {
           setErrorMessage("");
-          if (folderid) props.memo.addToMemo(folderid, response.data.folder);
+          if (folderid) props.memo.addToMemo(folderid, response.data);
           setFolder(response.data.folder);
           setChildren(response.data.folder.children);
+          setBreadcrumb(response.data.breadcrumb);
           dispatch(setIsLoading(false));
         })
         .catch((error) => {
@@ -114,13 +121,23 @@ export const FolderView: FunctionComponent<FolderProps> = (
 
   return (
     <Container className="folder-view-container">
-      <Row className="folder-view-row">
+      <Row className="folder-view-row" justify="start">
         {folder && folder.parent_folder && (
           <Button onClick={() => navigate(`/folder/${folder?.parent_folder}`)}>
             Back
           </Button>
         )}
-        <h2>Folder #{params.folderid}</h2>
+        {/* <h2>Folder #{params.folderid}</h2> */}
+        {breadcrumb && (
+          <Breadcrumb
+            names={breadcrumb.names}
+            values={breadcrumb.values}
+            types={breadcrumb.types}
+            onNameClick={(value: string, type: string) =>
+              navigate(`/${type}/${value}`)
+            }
+          />
+        )}
       </Row>
       {errorMessage && <ErrorMessage message={errorMessage} />}
       {isLoading && (

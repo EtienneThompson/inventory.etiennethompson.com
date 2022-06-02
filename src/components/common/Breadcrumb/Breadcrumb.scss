@@ -1,0 +1,24 @@
+@import "../../../assets/styles/colors.scss";
+
+.breadcrumb-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+.breadcrumb-item-container {
+    display: flex;
+    flex-direction: row;
+}
+
+.breadcrumb-item-name {
+    color: var(--primary);
+    font-size: 20px;
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+.breadcrumb-item-separator {
+    font-size: 20px;
+    font-weight: 500;
+}
