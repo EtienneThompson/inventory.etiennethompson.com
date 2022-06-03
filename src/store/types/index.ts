@@ -4,4 +4,10 @@ export type InventoryStore = {
   isUser: boolean;
   isAdmin: boolean;
   isLoggedIn: boolean;
+  currentState: SystemState;
 };
+
+export enum SystemState {
+  Viewing = "Viewing",
+  Moving = "Moving",
+}

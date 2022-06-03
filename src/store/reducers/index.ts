@@ -47,6 +47,15 @@ const setIsLoggedIn = (state: InventoryStore, action: AnyAction) => {
   return state.isLoggedIn;
 };
 
+const setCurrentState = (state: InventoryStore, action: AnyAction) => {
+  switch (action.type) {
+    case "currentState/set":
+      return action.payload;
+  }
+
+  return state.currentState;
+};
+
 export default function rootReducer(
   state: InventoryStore = initialState,
   action: AnyAction
@@ -57,5 +66,6 @@ export default function rootReducer(
     isUser: setIsUser(state, action),
     isAdmin: setIsAdmin(state, action),
     isLoggedIn: setIsLoggedIn(state, action),
+    currentState: setCurrentState(state, action),
   };
 }

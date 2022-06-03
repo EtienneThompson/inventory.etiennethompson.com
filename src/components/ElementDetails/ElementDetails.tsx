@@ -1,17 +1,31 @@
 import React, { FunctionComponent } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router";
 import { Button } from "../common/Button";
 import { Row, Col } from "../common/Grid";
 import { ErrorMessage } from "../common/ErrorMessage";
 import { LoadingSpinner } from "../common/LoadingSpinner";
-import { ElementDetailsProps, DeleteRequest } from "./ElementDetails.types";
+import {
+  ElementDetailsProps,
+  DeleteRequest,
+  ElementComponents,
+} from "./ElementDetails.types";
 import api from "../../api";
 import placeholderImage from "../../assets/images/photo-placeholder.png";
 import "./ElementDetails.scss";
+import { InventoryStore, SystemState } from "../../store/types";
+import {
+  deleteFromLocalStorage,
+  readFromLocalStorage,
+  writeToLocalStorage,
+} from "../../utils/localStorage";
+import { LocalStorageKey } from "../../types";
+import { setCurrentState } from "../../store/actions";
 
 export const ElementDetails: FunctionComponent<ElementDetailsProps> = (
   props: ElementDetailsProps
 ) => {
+  const dispatch = useDispatch();
   const navigate = useNavigate();
   const [editing, setEditing] = React.useState(false);
   const [editedName, setEditedName] = React.useState("");
@@ -19,6 +33,10 @@ export const ElementDetails: FunctionComponent<ElementDetailsProps> = (
   const [editedPict, setEditedPict] = React.useState<any>(null);
   const [isWaiting, setIsWaiting] = React.useState(false);
   const [errorMessage, setErrorMessage] = React.useState("");
+
+  const currentState = useSelector(
+    (state: InventoryStore) => state.currentState
+  );
 
   React.useEffect(() => {
     setEditedName(props.element.name);
@@ -58,13 +76,71 @@ export const ElementDetails: FunctionComponent<ElementDetailsProps> = (
       });
   };
 
+  const onMoveButtonClicked = () => {
+    // Keep track of the current element that wants to be moved.
+    writeToLocalStorage(
+      LocalStorageKey.MovingFolder,
+      JSON.stringify(props.element)
+    );
+    // Set currentState to be Moving.
+    dispatch(setCurrentState(SystemState.Moving));
+  };
+
+  const onMoveToButtonClicked = () => {
+    // Get the id of the current element.
+    let moveToId = props.element.folderid;
+    // Get the id of the element that we wanted to move.
+    let movingElement = readFromLocalStorage(LocalStorageKey.MovingFolder);
+    if (!movingElement) {
+      // Something went wrong.
+      dispatch(setCurrentState(SystemState.Viewing));
+      return;
+    }
+    let movingJson: ElementComponents = JSON.parse(movingElement);
+    let movingId = movingJson.folderid
+      ? movingJson.folderid
+      : movingJson.itemid;
+    let movingType = movingJson.folderid ? "folder" : "item";
+    console.log("Move To ID: " + moveToId);
+    console.log("Moving ID: " + movingId);
+    deleteFromLocalStorage(LocalStorageKey.MovingFolder);
+    // Make the API request to move the element.
+    api
+      .post("/inventory/move", {
+        moveToId: moveToId,
+        movingId: movingId,
+        movingType: movingType,
+      })
+      .then((response) => {
+        console.log(response);
+        dispatch(setCurrentState(SystemState.Viewing));
+      })
+      .catch((error) => {
+        console.log(error);
+        dispatch(setCurrentState(SystemState.Viewing));
+      });
+    // Remove from the cache the current element's parent folder.
+    // Remove from the cache the original element's parent folder.
+    // Remove from the cache the current element.
+    // Set currentState back to Viewing.
+    // dispatch(setCurrentState(SystemState.Viewing));
+    // Force update the page.
+  };
+
   const onEditButtonClicked = () => {
     setEditing(true);
   };
 
   const onCancelButtonClicked = () => {
-    resetFields();
-    setEditing(false);
+    // If currentState is Moving, set it back to Viewing.
+    // If currentState is Viewing, do the below.
+    if (currentState === SystemState.Moving) {
+      deleteFromLocalStorage(LocalStorageKey.MovingFolder);
+      dispatch(setCurrentState(SystemState.Viewing));
+    } else {
+      resetFields();
+      setEditing(false);
+    }
   };
 
   const onDoneButtonClicked = () => {
@@ -134,9 +210,23 @@ export const ElementDetails: FunctionComponent<ElementDetailsProps> = (
           {(!props.numChildren || props.numChildren === 0) && (
             <Button onClick={onDeleteButtonClicked}>Delete</Button>
           )}
-          {!editing && <Button onClick={onEditButtonClicked}>Edit</Button>}
-          {editing && <Button onClick={onCancelButtonClicked}>Cancel</Button>}
+          {!editing &&
+            currentState === SystemState.Viewing &&
+            props.element.parent_folder && (
+              <Button onClick={onMoveButtonClicked}>Move</Button>
+            )}
+          {!editing &&
+            currentState === SystemState.Moving &&
+            !props.element.itemid && (
+              <Button onClick={onMoveToButtonClicked}>Move To</Button>
+            )}
+          {!editing && currentState === SystemState.Viewing && (
+            <Button onClick={onEditButtonClicked}>Edit</Button>
+          )}
           {editing && <Button onClick={onDoneButtonClicked}>Done</Button>}
+          {(editing || (!editing && currentState === SystemState.Moving)) && (
+            <Button onClick={onCancelButtonClicked}>Cancel</Button>
+          )}
         </Row>
         <Row>
           <Col align="start" cols={1}>

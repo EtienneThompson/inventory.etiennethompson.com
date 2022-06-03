@@ -1,6 +1,6 @@
 import { createStore } from "redux";
 import { composeWithDevTools } from "redux-devtools-extension";
-import { InventoryStore } from "./types";
+import { InventoryStore, SystemState } from "./types";
 import rootReducer from "./reducers";
 
 export const initialState: InventoryStore = {
@@ -9,6 +9,7 @@ export const initialState: InventoryStore = {
   isUser: false,
   isAdmin: false,
   isLoggedIn: false,
+  currentState: SystemState.Viewing,
 };
 
 export const store = createStore(
