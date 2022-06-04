@@ -212,11 +212,6 @@ export const ElementDetails: FunctionComponent<ElementDetailsProps> = (
     <Row>
       <Col className="element-details-overlay">
         {errorMessage && <ErrorMessage message={errorMessage} />}
-        {/* {changingElement && (
-          <div className="element-details-loading-area">
-            <LoadingSpinner />
-          </div>
-        )} */}
         <Row justify="end">
           {(!props.numChildren || props.numChildren === 0) && (
             <Button onClick={onDeleteButtonClicked}>Delete</Button>

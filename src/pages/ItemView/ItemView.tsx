@@ -87,7 +87,7 @@ export const ItemView: FunctionComponent<ItemProps> = (props: ItemProps) => {
   return (
     <Container className="item-view-container">
       {changingElement && (
-        <div className="children-loading-area">
+        <div className="view-loading-area">
           <LoadingSpinner />
         </div>
       )}

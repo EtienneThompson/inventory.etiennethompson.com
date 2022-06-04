@@ -140,7 +140,7 @@ export const FolderView: FunctionComponent<FolderProps> = (
   return (
     <Container className="folder-view-container">
       {changingElement && (
-        <div className="children-loading-area">
+        <div className="view-loading-area">
           <LoadingSpinner />
         </div>
       )}
