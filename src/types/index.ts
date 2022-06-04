@@ -2,6 +2,7 @@ export enum LocalStorageKey {
   ClientId = "ClientId",
   IsUser = "IsUser",
   IsAdmin = "IsAdmin",
+  MovingFolder = "MovingFolder",
 }
 
 export interface MemoInterface {

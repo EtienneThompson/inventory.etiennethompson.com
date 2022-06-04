@@ -7,11 +7,12 @@ import { Container, Row } from "../../components/common/Grid";
 import { LoadingDetails } from "../../components/LoadingLayout";
 import { Breadcrumb } from "../../components/common/Breadcrumb";
 import { ErrorMessage } from "../../components/common/ErrorMessage";
+import { LoadingSpinner } from "../../components/common/LoadingSpinner";
+import { ElementDetails } from "../../components/ElementDetails/ElementDetails";
 import api from "../../api";
 import { setIsLoading } from "../../store/actions";
 import { BreadcrumbDetails } from "../../types";
 import { InventoryStore } from "../../store/types";
-import { ElementDetails } from "../../components/ElementDetails/ElementDetails";
 import { ItemProps, ItemDetails } from "./ItemView.types";
 import "./ItemView.scss";
 
@@ -30,7 +31,9 @@ export const ItemView: FunctionComponent<ItemProps> = (props: ItemProps) => {
   >(undefined);
 
   const isLoading = useSelector((state: InventoryStore) => state.isLoading);
-  // const breadcrumb = useSelector((state: InventoryStore) => state.breadcrumb);
+  const changingElement = useSelector(
+    (state: InventoryStore) => state.changingElement
+  );
 
   React.useEffect(() => {
     dispatch(setIsLoading(true));
@@ -38,7 +41,7 @@ export const ItemView: FunctionComponent<ItemProps> = (props: ItemProps) => {
       dispatch(setIsLoading(false));
       return;
     }
-    let cachedItem = props.memo.retrieveFromMemo(params.itemid);
+    let cachedItem = props.memo.get(params.itemid);
     if (cachedItem) {
       // If the item is in the cache use that data.
       setItem(cachedItem.item);
@@ -50,8 +53,7 @@ export const ItemView: FunctionComponent<ItemProps> = (props: ItemProps) => {
         .get(`/inventory/item?itemid=${params.itemid}`)
         .then((response) => {
           setErrorMessgage("");
-          if (params.itemid)
-            props.memo.addToMemo(params.itemid, response.data);
+          if (params.itemid) props.memo.add(params.itemid, response.data);
           setItem(response.data.item);
           setBreadcrumb(response.data.breadcrumb);
           dispatch(setIsLoading(false));
@@ -79,11 +81,16 @@ export const ItemView: FunctionComponent<ItemProps> = (props: ItemProps) => {
     newItem.updated = updated;
     setItem(newItem);
     // Update the cache when fields are edited.
-    props.memo.addToMemo(newItem.itemid, newItem);
+    props.memo.add(newItem.itemid, newItem);
   };
 
   return (
     <Container className="item-view-container">
+      {changingElement && (
+        <div className="view-loading-area">
+          <LoadingSpinner />
+        </div>
+      )}
       <Row justify="start">
         {item && item.parent_folder && (
           <Button onClick={() => navigate(`/folder/${item.parent_folder}`)}>

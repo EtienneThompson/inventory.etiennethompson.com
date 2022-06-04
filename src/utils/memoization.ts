@@ -7,7 +7,7 @@ export default class Memo {
     this.memo = {};
   }
 
-  retrieveFromMemo(id: string): any {
+  get(id: string): any {
     if (this.memo[id]) {
       return this.memo[id];
     } else {
@@ -15,7 +15,13 @@ export default class Memo {
     }
   }
 
-  addToMemo(id: string, value: any): void {
+  add(id: string, value: any): void {
     this.memo[id] = value;
+  }
+
+  delete(id: string): void {
+    if (this.memo[id]) {
+      delete this.memo[id];
+    }
   }
 }

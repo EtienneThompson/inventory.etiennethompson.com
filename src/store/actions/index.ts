@@ -5,10 +5,18 @@ import {
   deleteFromLocalStorage,
 } from "../../utils/localStorage";
 import { LocalStorageKey } from "../../types";
+import { SystemState } from "../types";
 
 export const setIsLoading = (status: boolean): AnyAction => {
   return {
     type: "loading/set",
+    payload: status,
+  };
+};
+
+export const setChangingElement = (status: boolean): AnyAction => {
+  return {
+    type: "loading/element",
     payload: status,
   };
 };
@@ -38,6 +46,13 @@ export const setLoginStatus = (loginStatus: boolean): AnyAction => {
   return {
     type: "login/set",
     payload: loginStatus,
+  };
+};
+
+export const setCurrentState = (newState: SystemState): AnyAction => {
+  return {
+    type: "currentState/set",
+    payload: newState,
   };
 };
 

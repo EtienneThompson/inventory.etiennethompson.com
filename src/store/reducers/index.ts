@@ -11,6 +11,15 @@ const setIsLoading = (state: InventoryStore, action: AnyAction) => {
   return state.isLoading;
 };
 
+const setChangingElement = (state: InventoryStore, action: AnyAction) => {
+  switch (action.type) {
+    case "loading/element":
+      return action.payload;
+  }
+
+  return state.changingElement;
+};
+
 const setClientId = (state: InventoryStore, action: AnyAction) => {
   switch (action.type) {
     case "clientId/set":
@@ -47,15 +56,26 @@ const setIsLoggedIn = (state: InventoryStore, action: AnyAction) => {
   return state.isLoggedIn;
 };
 
+const setCurrentState = (state: InventoryStore, action: AnyAction) => {
+  switch (action.type) {
+    case "currentState/set":
+      return action.payload;
+  }
+
+  return state.currentState;
+};
+
 export default function rootReducer(
   state: InventoryStore = initialState,
   action: AnyAction
 ) {
   return {
     isLoading: setIsLoading(state, action),
+    changingElement: setChangingElement(state, action),
     clientId: setClientId(state, action),
     isUser: setIsUser(state, action),
     isAdmin: setIsAdmin(state, action),
     isLoggedIn: setIsLoggedIn(state, action),
+    currentState: setCurrentState(state, action),
   };
 }
