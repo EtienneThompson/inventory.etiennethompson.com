@@ -30,7 +30,6 @@ export const ItemView: FunctionComponent<ItemProps> = (props: ItemProps) => {
   >(undefined);
 
   const isLoading = useSelector((state: InventoryStore) => state.isLoading);
-  // const breadcrumb = useSelector((state: InventoryStore) => state.breadcrumb);
 
   React.useEffect(() => {
     dispatch(setIsLoading(true));
@@ -38,7 +37,7 @@ export const ItemView: FunctionComponent<ItemProps> = (props: ItemProps) => {
       dispatch(setIsLoading(false));
       return;
     }
-    let cachedItem = props.memo.retrieveFromMemo(params.itemid);
+    let cachedItem = props.memo.get(params.itemid);
     if (cachedItem) {
       // If the item is in the cache use that data.
       setItem(cachedItem.item);
@@ -50,8 +49,7 @@ export const ItemView: FunctionComponent<ItemProps> = (props: ItemProps) => {
         .get(`/inventory/item?itemid=${params.itemid}`)
         .then((response) => {
           setErrorMessgage("");
-          if (params.itemid)
-            props.memo.addToMemo(params.itemid, response.data);
+          if (params.itemid) props.memo.add(params.itemid, response.data);
           setItem(response.data.item);
           setBreadcrumb(response.data.breadcrumb);
           dispatch(setIsLoading(false));
@@ -79,7 +77,7 @@ export const ItemView: FunctionComponent<ItemProps> = (props: ItemProps) => {
     newItem.updated = updated;
     setItem(newItem);
     // Update the cache when fields are edited.
-    props.memo.addToMemo(newItem.itemid, newItem);
+    props.memo.add(newItem.itemid, newItem);
   };
 
   return (

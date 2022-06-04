@@ -101,8 +101,13 @@ export const ElementDetails: FunctionComponent<ElementDetailsProps> = (
       ? movingJson.folderid
       : movingJson.itemid;
     let movingType = movingJson.folderid ? "folder" : "item";
-    console.log("Move To ID: " + moveToId);
-    console.log("Moving ID: " + movingId);
+
+    if (!moveToId || !movingId) {
+      // Something went wrong.
+      dispatch(setCurrentState(SystemState.Viewing));
+      return;
+    }
+
     deleteFromLocalStorage(LocalStorageKey.MovingFolder);
     // Make the API request to move the element.
     api
@@ -112,19 +117,23 @@ export const ElementDetails: FunctionComponent<ElementDetailsProps> = (
         movingType: movingType,
       })
       .then((response) => {
-        console.log(response);
+        // Remove affected elements from the cache.
+        props.memo.delete(movingJson.parent_folder);
+        props.memo.delete(props.element.folderid as string);
+        props.memo.delete(moveToId as string);
+        props.memo.delete(movingId as string);
+
+        // Call the method to update the parent.
+        if (props.moveChild) {
+          props.moveChild();
+        }
+        // Set currentState back to Viewing.
         dispatch(setCurrentState(SystemState.Viewing));
       })
       .catch((error) => {
         console.log(error);
         dispatch(setCurrentState(SystemState.Viewing));
       });
-    // Remove from the cache the current element's parent folder.
-    // Remove from the cache the original element's parent folder.
-    // Remove from the cache the current element.
-    // Set currentState back to Viewing.
-    // dispatch(setCurrentState(SystemState.Viewing));
-    // Force update the page.
   };
 
   const onEditButtonClicked = () => {
@@ -168,21 +177,19 @@ export const ElementDetails: FunctionComponent<ElementDetailsProps> = (
           response.data.updated
         );
         // Fetch the cached parent from the cache.
-        let cachedParent = props.memo.retrieveFromMemo(
-          props.element.parent_folder
-        );
+        let cachedParent = props.memo.get(props.element.parent_folder);
         if (cachedParent) {
           // Find the child this current element corresponds to.
           let elementId = !!props.element.folderid
             ? props.element.folderid
             : props.element.itemid;
-          let updatedChild = cachedParent.children.filter(
+          let updatedChild = cachedParent.folder.children.filter(
             (child: any) => child.id === elementId
           )[0];
           // Update it's fields and update the cache.
           updatedChild.name = editedName;
           updatedChild.picture = response.data.picture;
-          props.memo.addToMemo(props.element.parent_folder, cachedParent);
+          props.memo.add(props.element.parent_folder, cachedParent);
         }
         // Reset UI fields.
         resetFields();

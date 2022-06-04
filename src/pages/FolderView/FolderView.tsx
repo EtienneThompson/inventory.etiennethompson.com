@@ -54,7 +54,7 @@ export const FolderView: FunctionComponent<FolderProps> = (
       dispatch(setIsLoading(false));
       return;
     }
-    let cachedFolder = props.memo.retrieveFromMemo(folderid);
+    let cachedFolder = props.memo.get(folderid);
     if (cachedFolder && !force_update) {
       // If the element is in the cache, use that data.
       setFolder(cachedFolder.folder);
@@ -67,7 +67,7 @@ export const FolderView: FunctionComponent<FolderProps> = (
         .get(`/inventory/folder?folderid=${params.folderid}`)
         .then((response) => {
           setErrorMessage("");
-          if (folderid) props.memo.addToMemo(folderid, response.data);
+          if (folderid) props.memo.add(folderid, response.data);
           setFolder(response.data.folder);
           setChildren(response.data.folder.children);
           setBreadcrumb(response.data.breadcrumb);
@@ -97,7 +97,7 @@ export const FolderView: FunctionComponent<FolderProps> = (
     // Update the cache when a new child is added.
     let newCacheFolder = { ...folder };
     newCacheFolder.children = newChildren;
-    props.memo.addToMemo(newCacheFolder.folderid, newCacheFolder);
+    props.memo.add(newCacheFolder.folderid, newCacheFolder);
   };
 
   const updateFolder = (
@@ -116,7 +116,15 @@ export const FolderView: FunctionComponent<FolderProps> = (
     newFolder.updated = updated;
     setFolder(newFolder);
     // Update the cache when a folder is edited.
-    props.memo.addToMemo(newFolder.folderid, newFolder);
+    props.memo.add(newFolder.folderid, newFolder);
+  };
+
+  const moveChild = () => {
+    // Fetch the updated children when an element is moved.
+    api
+      .get(`/inventory/folder/children?folderid=${params.folderid}`)
+      .then((response) => setChildren(response.data.children))
+      .catch((error) => console.log(error));
   };
 
   return (
@@ -156,6 +164,7 @@ export const FolderView: FunctionComponent<FolderProps> = (
               element={folder}
               type={"folder"}
               updateElement={updateFolder}
+              moveChild={moveChild}
               numChildren={folder.children.length}
             />
           </div>

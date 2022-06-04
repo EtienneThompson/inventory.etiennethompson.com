@@ -10,6 +10,7 @@ export interface ElementDetailsProps {
     newPict: string,
     updated: string
   ) => void;
+  moveChild?: () => void;
   numChildren?: number;
 }
 
