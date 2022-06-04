@@ -1,5 +1,6 @@
 export type InventoryStore = {
   isLoading: boolean;
+  changingElement: boolean;
   clientId: string | undefined;
   isUser: boolean;
   isAdmin: boolean;

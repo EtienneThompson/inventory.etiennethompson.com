@@ -13,7 +13,7 @@ import {
   LoadingDetails,
 } from "../../components/LoadingLayout";
 import { AiFillFolder, AiFillInfoCircle } from "react-icons/ai";
-import { setIsLoading } from "../../store/actions";
+import { setIsLoading, setChangingElement } from "../../store/actions";
 import { BreadcrumbDetails } from "../../types";
 import { InventoryStore } from "../../store/types";
 import { FolderProps, FolderDetails, ChildDetails } from "./FolderView.types";
@@ -21,6 +21,7 @@ import api from "../../api";
 import { extractQueryParam } from "../../utils/window";
 import placeholderImage from "../../assets/images/photo-placeholder.png";
 import "./FolderView.scss";
+import { LoadingSpinner } from "../../components/common/LoadingSpinner";
 
 export const FolderView: FunctionComponent<FolderProps> = (
   props: FolderProps
@@ -44,6 +45,9 @@ export const FolderView: FunctionComponent<FolderProps> = (
   const [errorMessage, setErrorMessage] = React.useState("");
 
   const isLoading = useSelector((state: InventoryStore) => state.isLoading);
+  const changingElement = useSelector(
+    (state: InventoryStore) => state.changingElement
+  );
 
   React.useEffect(() => {
     dispatch(setIsLoading(true));
@@ -123,12 +127,23 @@ export const FolderView: FunctionComponent<FolderProps> = (
     // Fetch the updated children when an element is moved.
     api
       .get(`/inventory/folder/children?folderid=${params.folderid}`)
-      .then((response) => setChildren(response.data.children))
-      .catch((error) => console.log(error));
+      .then((response) => {
+        setChildren(response.data.children);
+        dispatch(setChangingElement(false));
+      })
+      .catch((error) => {
+        console.log(error);
+        dispatch(setChangingElement(false));
+      });
   };
 
   return (
     <Container className="folder-view-container">
+      {changingElement && (
+        <div className="children-loading-area">
+          <LoadingSpinner />
+        </div>
+      )}
       <Row className="folder-view-row" justify="start">
         {folder && folder.parent_folder && (
           <Button onClick={() => navigate(`/folder/${folder?.parent_folder}`)}>

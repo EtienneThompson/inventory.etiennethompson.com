@@ -4,7 +4,6 @@ import { useNavigate } from "react-router";
 import { Button } from "../common/Button";
 import { Row, Col } from "../common/Grid";
 import { ErrorMessage } from "../common/ErrorMessage";
-import { LoadingSpinner } from "../common/LoadingSpinner";
 import {
   ElementDetailsProps,
   DeleteRequest,
@@ -20,7 +19,7 @@ import {
   writeToLocalStorage,
 } from "../../utils/localStorage";
 import { LocalStorageKey } from "../../types";
-import { setCurrentState } from "../../store/actions";
+import { setChangingElement, setCurrentState } from "../../store/actions";
 
 export const ElementDetails: FunctionComponent<ElementDetailsProps> = (
   props: ElementDetailsProps
@@ -31,7 +30,6 @@ export const ElementDetails: FunctionComponent<ElementDetailsProps> = (
   const [editedName, setEditedName] = React.useState("");
   const [editedDesc, setEditedDesc] = React.useState("");
   const [editedPict, setEditedPict] = React.useState<any>(null);
-  const [isWaiting, setIsWaiting] = React.useState(false);
   const [errorMessage, setErrorMessage] = React.useState("");
 
   const currentState = useSelector(
@@ -50,7 +48,7 @@ export const ElementDetails: FunctionComponent<ElementDetailsProps> = (
   };
 
   const onDeleteButtonClicked = () => {
-    setIsWaiting(true);
+    dispatch(setChangingElement(true));
     let deleteData = {} as DeleteRequest;
     if (props.type === "folder" && props.element.folderid) {
       deleteData.folderid = props.element.folderid;
@@ -65,14 +63,14 @@ export const ElementDetails: FunctionComponent<ElementDetailsProps> = (
         setErrorMessage("");
         // Since the item no longer exists, navigate the user back to the
         // parent folder.
-        setIsWaiting(false);
+        dispatch(setChangingElement(false));
         // Set the force_update flag when navigating back to refetch the data
         // from the database.
         navigate(`/folder/${props.element.parent_folder}?force_update=true`);
       })
       .catch((error) => {
         setErrorMessage(`Failed to delete the ${props.type}.`);
-        setIsWaiting(false);
+        dispatch(setChangingElement(false));
       });
   };
 
@@ -87,12 +85,15 @@ export const ElementDetails: FunctionComponent<ElementDetailsProps> = (
   };
 
   const onMoveToButtonClicked = () => {
+    // Set state to changing the element.
+    dispatch(setChangingElement(true));
     // Get the id of the current element.
     let moveToId = props.element.folderid;
     // Get the id of the element that we wanted to move.
     let movingElement = readFromLocalStorage(LocalStorageKey.MovingFolder);
     if (!movingElement) {
       // Something went wrong.
+      dispatch(setChangingElement(false));
       dispatch(setCurrentState(SystemState.Viewing));
       return;
     }
@@ -104,6 +105,7 @@ export const ElementDetails: FunctionComponent<ElementDetailsProps> = (
 
     if (!moveToId || !movingId) {
       // Something went wrong.
+      dispatch(setChangingElement(false));
       dispatch(setCurrentState(SystemState.Viewing));
       return;
     }
@@ -126,6 +128,8 @@ export const ElementDetails: FunctionComponent<ElementDetailsProps> = (
         // Call the method to update the parent.
         if (props.moveChild) {
           props.moveChild();
+        } else {
+          dispatch(setChangingElement(false));
         }
         // Set currentState back to Viewing.
         dispatch(setCurrentState(SystemState.Viewing));
@@ -153,7 +157,7 @@ export const ElementDetails: FunctionComponent<ElementDetailsProps> = (
   };
 
   const onDoneButtonClicked = () => {
-    setIsWaiting(true);
+    dispatch(setChangingElement(true));
     let formData = new FormData();
     formData.append("file", editedPict);
     formData.append(
@@ -194,13 +198,13 @@ export const ElementDetails: FunctionComponent<ElementDetailsProps> = (
         // Reset UI fields.
         resetFields();
         setEditing(false);
-        setIsWaiting(false);
+        dispatch(setChangingElement(false));
       })
       .catch((error) => {
         setErrorMessage("Couldn't update the item.");
         resetFields();
         setEditing(false);
-        setIsWaiting(false);
+        dispatch(setChangingElement(false));
       });
   };
 
@@ -208,11 +212,11 @@ export const ElementDetails: FunctionComponent<ElementDetailsProps> = (
     <Row>
       <Col className="element-details-overlay">
         {errorMessage && <ErrorMessage message={errorMessage} />}
-        {isWaiting && (
+        {/* {changingElement && (
           <div className="element-details-loading-area">
             <LoadingSpinner />
           </div>
-        )}
+        )} */}
         <Row justify="end">
           {(!props.numChildren || props.numChildren === 0) && (
             <Button onClick={onDeleteButtonClicked}>Delete</Button>

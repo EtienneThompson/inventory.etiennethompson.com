@@ -5,6 +5,7 @@ import rootReducer from "./reducers";
 
 export const initialState: InventoryStore = {
   isLoading: false,
+  changingElement: false,
   clientId: undefined,
   isUser: false,
   isAdmin: false,

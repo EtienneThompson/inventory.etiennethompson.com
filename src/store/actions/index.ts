@@ -14,6 +14,13 @@ export const setIsLoading = (status: boolean): AnyAction => {
   };
 };
 
+export const setChangingElement = (status: boolean): AnyAction => {
+  return {
+    type: "loading/element",
+    payload: status,
+  };
+};
+
 export const updateClientId = (newClientId: string | undefined): AnyAction => {
   return {
     type: "clientId/set",
