@@ -1,8 +1,10 @@
+import { BreadcrumbDetails } from "../../types";
 import Memo from "../../utils/memoization";
 
 export interface ElementDetailsProps {
   memo: Memo;
   element: ElementComponents;
+  breadcrumb: BreadcrumbDetails | undefined;
   type: string;
   updateElement: (
     newName: string,

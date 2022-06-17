@@ -2,6 +2,7 @@ import React, { FunctionComponent } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router";
 import { Button } from "../common/Button";
+import { Breadcrumb } from "../common/Breadcrumb";
 import { Row, Col, Container } from "../common/Grid";
 import { ErrorMessage } from "../common/ErrorMessage";
 import {
@@ -212,6 +213,18 @@ export const ElementDetails: FunctionComponent<ElementDetailsProps> = (
     <Row>
       <Col className="element-details-overlay">
         {errorMessage && <ErrorMessage message={errorMessage} />}
+        <Row justify="start">
+          {props.breadcrumb && (
+            <Breadcrumb
+              names={props.breadcrumb.names}
+              values={props.breadcrumb.values}
+              types={props.breadcrumb.types}
+              onNameClick={(value: string, type: string) =>
+                navigate(`/${type}/${value}`)
+              }
+            />
+          )}
+        </Row>
         <Row justify="end">
           {(!props.numChildren || props.numChildren === 0) && (
             <Button onClick={onDeleteButtonClicked}>Delete</Button>
@@ -256,33 +269,37 @@ export const ElementDetails: FunctionComponent<ElementDetailsProps> = (
             />
           )}
           <Col>
-            <Row className="details-section" justify="start">
-              <div className="details-label">Name</div>
-              {!editing && <p className="details">{props.element.name}</p>}
-              {editing && (
-                <input
-                  type="text"
-                  value={editedName}
-                  onChange={(event: any) => {
-                    setEditedName(event.currentTarget.value);
-                  }}
-                />
-              )}
-              <div className="details-label">Description</div>
+            <Row className="details-section">
+              <Col align="start">
+                <div className="details-label">Name</div>
+                {!editing && <p className="details">{props.element.name}</p>}
+                {editing && (
+                  <input
+                    type="text"
+                    value={editedName}
+                    onChange={(event: any) => {
+                      setEditedName(event.currentTarget.value);
+                    }}
+                  />
+                )}
+              </Col>
             </Row>
-            <Row className="details-section" justify="start">
-              {!editing && (
-                <p className="details">{props.element.description}</p>
-              )}
-              {editing && (
-                <input
-                  type="text"
-                  value={editedDesc}
-                  onChange={(event: any) => {
-                    setEditedDesc(event.currentTarget.value);
-                  }}
-                />
-              )}
+            <Row className="details-section">
+              <Col align="start">
+                <div className="details-label">Description</div>
+                {!editing && (
+                  <p className="details">{props.element.description}</p>
+                )}
+                {editing && (
+                  <input
+                    type="text"
+                    value={editedDesc}
+                    onChange={(event: any) => {
+                      setEditedDesc(event.currentTarget.value);
+                    }}
+                  />
+                )}
+              </Col>
             </Row>
             <Row>
               <Col className="details-section" align="start">
