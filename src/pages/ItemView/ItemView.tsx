@@ -5,7 +5,6 @@ import { useParams } from "react-router-dom";
 import { Button } from "../../components/common/Button";
 import { Container, Row } from "../../components/common/Grid";
 import { LoadingDetails } from "../../components/LoadingLayout";
-import { Breadcrumb } from "../../components/common/Breadcrumb";
 import { ErrorMessage } from "../../components/common/ErrorMessage";
 import { LoadingSpinner } from "../../components/common/LoadingSpinner";
 import { ElementDetails } from "../../components/ElementDetails/ElementDetails";
@@ -97,16 +96,6 @@ export const ItemView: FunctionComponent<ItemProps> = (props: ItemProps) => {
             Back
           </Button>
         )}
-        {breadcrumb && (
-          <Breadcrumb
-            names={breadcrumb.names}
-            values={breadcrumb.values}
-            types={breadcrumb.types}
-            onNameClick={(value: string, type: string) =>
-              navigate(`/${type}/${value}`)
-            }
-          />
-        )}
       </Row>
       {errorMessage && <ErrorMessage message={errorMessage} />}
       {isLoading && <LoadingDetails />}
@@ -114,6 +103,7 @@ export const ItemView: FunctionComponent<ItemProps> = (props: ItemProps) => {
         <ElementDetails
           memo={props.memo}
           element={item}
+          breadcrumb={breadcrumb}
           type={"item"}
           updateElement={updateItem}
         />

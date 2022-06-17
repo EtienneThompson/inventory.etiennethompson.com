@@ -1,19 +1,19 @@
-.test {
-    height: calc(100% - 70px);
+.folder-container {
+    height: calc(100% - 50px);
     display: flex;
     flex-flow: column;
 }
 
 .folder-view-container {
     max-width: 800px;
-    height: 93%;
+    height: 94%;
     display: flex;
     flex-flow: column;
 }
 
 .folder-view-row {
     width: 100%;
-    flex: 0 1 auto;
+    flex: 1 1 auto;
 }
 
 .folder-view-overflow {
@@ -23,10 +23,6 @@
     flex: 1 1 auto;
     overflow-y: auto;
     padding: 5px;
-}
-
-.folder-view-footer {
-    flex: 0 1 5px;
 }
 
 .folder-child {
@@ -49,13 +45,6 @@
 
 .folder-child:last-child {
     margin-bottom: 10px;
-}
-
-.child-container {
-    width: 100%;
-    overflow-x: visible;
-    overflow-y: scroll;
-    padding: 5px;
 }
 
 .child-image {

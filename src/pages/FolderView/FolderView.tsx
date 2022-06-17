@@ -3,15 +3,11 @@ import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router";
 import { useNavigate } from "react-router";
 import { Button } from "../../components/common/Button";
-import { Breadcrumb } from "../../components/common/Breadcrumb";
 import { ElementDetails } from "../../components/ElementDetails";
 import { Container, Row, Col } from "../../components/common/Grid";
 import { ErrorMessage } from "../../components/common/ErrorMessage";
 import { NewElementEditor } from "../../components/NewElementEditor";
-import {
-  LoadingChildren,
-  LoadingDetails,
-} from "../../components/LoadingLayout";
+import { LoadingDetails } from "../../components/LoadingLayout";
 import { AiFillFolder, AiFillInfoCircle } from "react-icons/ai";
 import { setIsLoading, setChangingElement } from "../../store/actions";
 import { BreadcrumbDetails } from "../../types";
@@ -150,33 +146,22 @@ export const FolderView: FunctionComponent<FolderProps> = (
             Back
           </Button>
         )}
-        {/* <h2>Folder #{params.folderid}</h2> */}
-        {breadcrumb && (
-          <Breadcrumb
-            names={breadcrumb.names}
-            values={breadcrumb.values}
-            types={breadcrumb.types}
-            onNameClick={(value: string, type: string) =>
-              navigate(`/${type}/${value}`)
-            }
-          />
-        )}
       </Row>
       {errorMessage && <ErrorMessage message={errorMessage} />}
       {isLoading && (
-        <Row>
+        <Row className="folder-view-row">
           <Col>
-            <LoadingDetails />
-            <LoadingChildren />
+            <LoadingDetails showChildren={true} />
           </Col>
         </Row>
       )}
       {!isLoading && folder && (
-        <Col className="test">
+        <Col className="folder-container">
           <div className="folder-view-row">
             <ElementDetails
               memo={props.memo}
               element={folder}
+              breadcrumb={breadcrumb}
               type={"folder"}
               updateElement={updateFolder}
               moveChild={moveChild}
@@ -223,7 +208,6 @@ export const FolderView: FunctionComponent<FolderProps> = (
                 ))}
             </Col>
           </div>
-          <div className="folder-view-footer"></div>
         </Col>
       )}
     </Container>

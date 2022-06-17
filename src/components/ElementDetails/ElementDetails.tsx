@@ -2,7 +2,8 @@ import React, { FunctionComponent } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router";
 import { Button } from "../common/Button";
-import { Row, Col } from "../common/Grid";
+import { Breadcrumb } from "../common/Breadcrumb";
+import { Row, Col, Container } from "../common/Grid";
 import { ErrorMessage } from "../common/ErrorMessage";
 import {
   ElementDetailsProps,
@@ -212,6 +213,18 @@ export const ElementDetails: FunctionComponent<ElementDetailsProps> = (
     <Row>
       <Col className="element-details-overlay">
         {errorMessage && <ErrorMessage message={errorMessage} />}
+        <Row justify="start">
+          {props.breadcrumb && (
+            <Breadcrumb
+              names={props.breadcrumb.names}
+              values={props.breadcrumb.values}
+              types={props.breadcrumb.types}
+              onNameClick={(value: string, type: string) =>
+                navigate(`/${type}/${value}`)
+              }
+            />
+          )}
+        </Row>
         <Row justify="end">
           {(!props.numChildren || props.numChildren === 0) && (
             <Button onClick={onDeleteButtonClicked}>Delete</Button>
@@ -234,10 +247,30 @@ export const ElementDetails: FunctionComponent<ElementDetailsProps> = (
             <Button onClick={onCancelButtonClicked}>Cancel</Button>
           )}
         </Row>
-        <Row>
-          <Col align="start" cols={1}>
-            <Row>
-              <Col className="details-section" align="start">
+        <Container className="field-container">
+          {!editing && (
+            <img
+              className="image-details"
+              alt="Nothing pictured"
+              src={
+                props.element.picture
+                  ? props.element.picture
+                  : placeholderImage
+              }
+            />
+          )}
+          {editing && (
+            <input
+              type="file"
+              accept="image/*"
+              onChange={(event: any) => {
+                setEditedPict(event.target.files[0]);
+              }}
+            />
+          )}
+          <Col>
+            <Row className="details-section">
+              <Col align="start">
                 <div className="details-label">Name</div>
                 {!editing && <p className="details">{props.element.name}</p>}
                 {editing && (
@@ -251,8 +284,8 @@ export const ElementDetails: FunctionComponent<ElementDetailsProps> = (
                 )}
               </Col>
             </Row>
-            <Row>
-              <Col className="details-section" align="start">
+            <Row className="details-section">
+              <Col align="start">
                 <div className="details-label">Description</div>
                 {!editing && (
                   <p className="details">{props.element.description}</p>
@@ -279,29 +312,7 @@ export const ElementDetails: FunctionComponent<ElementDetailsProps> = (
               </Col>
             </Row>
           </Col>
-          <Col align="center" cols={4}>
-            {!editing && (
-              <img
-                className="image-details"
-                alt="Nothing pictured"
-                src={
-                  props.element.picture
-                    ? props.element.picture
-                    : placeholderImage
-                }
-              />
-            )}
-            {editing && (
-              <input
-                type="file"
-                accept="image/*"
-                onChange={(event: any) => {
-                  setEditedPict(event.target.files[0]);
-                }}
-              />
-            )}
-          </Col>
-        </Row>
+        </Container>
       </Col>
     </Row>
   );

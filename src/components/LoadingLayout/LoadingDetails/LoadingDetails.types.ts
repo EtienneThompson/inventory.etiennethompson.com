@@ -1,1 +1,3 @@
-export interface LoadingDetailsProps {}
+export interface LoadingDetailsProps {
+  showChildren?: boolean;
+}
