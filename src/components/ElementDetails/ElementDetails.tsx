@@ -2,7 +2,7 @@ import React, { FunctionComponent } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router";
 import { Button } from "../common/Button";
-import { Row, Col } from "../common/Grid";
+import { Row, Col, Container } from "../common/Grid";
 import { ErrorMessage } from "../common/ErrorMessage";
 import {
   ElementDetailsProps,
@@ -234,39 +234,55 @@ export const ElementDetails: FunctionComponent<ElementDetailsProps> = (
             <Button onClick={onCancelButtonClicked}>Cancel</Button>
           )}
         </Row>
-        <Row>
-          <Col align="start" cols={1}>
-            <Row>
-              <Col className="details-section" align="start">
-                <div className="details-label">Name</div>
-                {!editing && <p className="details">{props.element.name}</p>}
-                {editing && (
-                  <input
-                    type="text"
-                    value={editedName}
-                    onChange={(event: any) => {
-                      setEditedName(event.currentTarget.value);
-                    }}
-                  />
-                )}
-              </Col>
+        <Container className="field-container">
+          {!editing && (
+            <img
+              className="image-details"
+              alt="Nothing pictured"
+              src={
+                props.element.picture
+                  ? props.element.picture
+                  : placeholderImage
+              }
+            />
+          )}
+          {editing && (
+            <input
+              type="file"
+              accept="image/*"
+              onChange={(event: any) => {
+                setEditedPict(event.target.files[0]);
+              }}
+            />
+          )}
+          <Col>
+            <Row className="details-section" justify="start">
+              <div className="details-label">Name</div>
+              {!editing && <p className="details">{props.element.name}</p>}
+              {editing && (
+                <input
+                  type="text"
+                  value={editedName}
+                  onChange={(event: any) => {
+                    setEditedName(event.currentTarget.value);
+                  }}
+                />
+              )}
+              <div className="details-label">Description</div>
             </Row>
-            <Row>
-              <Col className="details-section" align="start">
-                <div className="details-label">Description</div>
-                {!editing && (
-                  <p className="details">{props.element.description}</p>
-                )}
-                {editing && (
-                  <input
-                    type="text"
-                    value={editedDesc}
-                    onChange={(event: any) => {
-                      setEditedDesc(event.currentTarget.value);
-                    }}
-                  />
-                )}
-              </Col>
+            <Row className="details-section" justify="start">
+              {!editing && (
+                <p className="details">{props.element.description}</p>
+              )}
+              {editing && (
+                <input
+                  type="text"
+                  value={editedDesc}
+                  onChange={(event: any) => {
+                    setEditedDesc(event.currentTarget.value);
+                  }}
+                />
+              )}
             </Row>
             <Row>
               <Col className="details-section" align="start">
@@ -279,29 +295,7 @@ export const ElementDetails: FunctionComponent<ElementDetailsProps> = (
               </Col>
             </Row>
           </Col>
-          <Col align="center" cols={4}>
-            {!editing && (
-              <img
-                className="image-details"
-                alt="Nothing pictured"
-                src={
-                  props.element.picture
-                    ? props.element.picture
-                    : placeholderImage
-                }
-              />
-            )}
-            {editing && (
-              <input
-                type="file"
-                accept="image/*"
-                onChange={(event: any) => {
-                  setEditedPict(event.target.files[0]);
-                }}
-              />
-            )}
-          </Col>
-        </Row>
+        </Container>
       </Col>
     </Row>
   );

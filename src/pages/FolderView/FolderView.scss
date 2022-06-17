@@ -1,7 +1,12 @@
-.test {
+.folder-container {
     height: calc(100% - 70px);
     display: flex;
     flex-flow: column;
+
+    @media screen and (max-width: 600px) {
+        margin-top: 200px;
+        height: 100%;
+    }
 }
 
 .folder-view-container {
@@ -23,6 +28,10 @@
     flex: 1 1 auto;
     overflow-y: auto;
     padding: 5px;
+
+    @media screen and (max-width: 600px) {
+        overflow-y: visible;
+    }
 }
 
 .folder-view-footer {
@@ -49,13 +58,6 @@
 
 .folder-child:last-child {
     margin-bottom: 10px;
-}
-
-.child-container {
-    width: 100%;
-    overflow-x: visible;
-    overflow-y: scroll;
-    padding: 5px;
 }
 
 .child-image {

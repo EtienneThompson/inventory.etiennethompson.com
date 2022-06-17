@@ -172,7 +172,7 @@ export const FolderView: FunctionComponent<FolderProps> = (
         </Row>
       )}
       {!isLoading && folder && (
-        <Col className="test">
+        <Col className="folder-container">
           <div className="folder-view-row">
             <ElementDetails
               memo={props.memo}
