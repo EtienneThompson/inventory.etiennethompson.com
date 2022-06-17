@@ -2,6 +2,15 @@
     margin: 3px;
 }
 
+.new-element-form-container {
+    display: flex;
+    flex-direction: row;
+
+    @media screen and (max-width: 600px) {
+        flex-direction: column;
+    }
+}
+
 .element-detail {
     margin: 3px;
 }
@@ -23,4 +32,9 @@
     justify-content: center;
     align-items: center;
     border-radius: 5px;
+}
+
+.file-upload {
+    width: 100%;
+    margin: 3px 0px;
 }

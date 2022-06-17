@@ -1,5 +1,5 @@
 import React, { FunctionComponent } from "react";
-import { Row, Col } from "../common/Grid";
+import { Row, Col, Container } from "../common/Grid";
 import { Toggle } from "../common/Toggle";
 import { Button } from "../common/Button";
 import { NewElementEditorProps } from "./NewElementEditor.types";
@@ -73,7 +73,7 @@ export const NewElementEditor: FunctionComponent<NewElementEditorProps> = (
           {addNew && <Button onClick={onDoneButtonClicked}>Done</Button>}
         </Row>
         {addNew && (
-          <Row>
+          <Container className="new-element-form-container">
             <Col>
               <Row justify="start" className="element-detail">
                 <div>Item</div>
@@ -105,14 +105,13 @@ export const NewElementEditor: FunctionComponent<NewElementEditorProps> = (
                 ></input>
               </Row>
             </Col>
-            <Col cols={3}>
-              <input
-                type="file"
-                accept="image/*"
-                onChange={(event: any) => setPicture(event.target.files[0])}
-              />
-            </Col>
-          </Row>
+            <input
+              className="file-upload"
+              type="file"
+              accept="image/*"
+              onChange={(event: any) => setPicture(event.target.files[0])}
+            />
+          </Container>
         )}
       </Col>
     </Row>
