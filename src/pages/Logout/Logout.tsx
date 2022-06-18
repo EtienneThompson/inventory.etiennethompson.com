@@ -2,6 +2,7 @@ import React from "react";
 import { Container } from "../../components/common/Grid";
 import { LogoutReasons } from "./Logout.types";
 import { extractQueryParam } from "../../utils/window";
+import "./Logout.scss";
 
 export const Logout = () => {
   document.title = "Etienne Thompson - Inventory System - Logout";
@@ -19,7 +20,7 @@ export const Logout = () => {
   }, []);
 
   return (
-    <Container>
+    <Container className="logout-full-height">
       <div style={{ width: "50%", textAlign: "center" }}>
         {logoutReasons[reason]}
       </div>

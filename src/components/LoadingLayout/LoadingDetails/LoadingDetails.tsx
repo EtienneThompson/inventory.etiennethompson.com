@@ -7,8 +7,11 @@ export const LoadingDetails: FunctionComponent<LoadingDetailsProps> = (
   props: LoadingDetailsProps
 ) => {
   return (
-    <Row>
+    <Row className="loading-details-container">
       <Col className="details-skeleton-container">
+        <Row justify="start">
+          <div className="details-skeleton-general details-skeleton-button details-skeleton-loading"></div>
+        </Row>
         <Row justify="start">
           <div className="details-skeleton-general details-skeleton-second-descriptor details-skeleton-loading"></div>
         </Row>
