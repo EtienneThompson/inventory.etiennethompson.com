@@ -174,7 +174,7 @@ export const FolderView: FunctionComponent<FolderProps> = (
               parent={folder.folderid}
             />
           </div>
-          <div className="folder-view-overflow">
+          <div className="folder-view-row">
             <Col>
               {children &&
                 children.map((child, index) => (

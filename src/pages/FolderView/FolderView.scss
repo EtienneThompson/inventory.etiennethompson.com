@@ -1,12 +1,10 @@
-.folder-container {
-    height: calc(100% - 50px);
+.folder-view-container {
+    max-width: 800px;
     display: flex;
     flex-flow: column;
 }
 
-.folder-view-container {
-    max-width: 800px;
-    height: 94%;
+.folder-container {
     display: flex;
     flex-flow: column;
 }
