@@ -97,7 +97,10 @@ export const FolderView: FunctionComponent<FolderProps> = (
     // Update the cache when a new child is added.
     let newCacheFolder = { ...folder };
     newCacheFolder.children = newChildren;
-    props.memo.add(newCacheFolder.folderid, newCacheFolder);
+    props.memo.add(newCacheFolder.folderid, {
+      folder: newCacheFolder,
+      breadcrumb: breadcrumb,
+    });
   };
 
   const updateFolder = (
