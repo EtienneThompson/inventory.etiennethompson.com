@@ -2,13 +2,14 @@ import React, { FunctionComponent } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router";
 import { useNavigate } from "react-router";
+import { AiFillFolder, AiFillInfoCircle } from "react-icons/ai";
 import { Button } from "../../components/common/Button";
+import { LoadingDetails } from "../../components/LoadingLayout";
 import { ElementDetails } from "../../components/ElementDetails";
 import { Container, Row, Col } from "../../components/common/Grid";
 import { ErrorMessage } from "../../components/common/ErrorMessage";
 import { NewElementEditor } from "../../components/NewElementEditor";
-import { LoadingDetails } from "../../components/LoadingLayout";
-import { AiFillFolder, AiFillInfoCircle } from "react-icons/ai";
+import { LoadingSpinner } from "../../components/common/LoadingSpinner";
 import { setIsLoading, setChangingElement } from "../../store/actions";
 import { BreadcrumbDetails } from "../../types";
 import { InventoryStore } from "../../store/types";
@@ -17,7 +18,6 @@ import api from "../../api";
 import { extractQueryParam } from "../../utils/window";
 import placeholderImage from "../../assets/images/photo-placeholder.png";
 import "./FolderView.scss";
-import { LoadingSpinner } from "../../components/common/LoadingSpinner";
 
 export const FolderView: FunctionComponent<FolderProps> = (
   props: FolderProps
