@@ -1,5 +1,5 @@
 import React from "react";
-import ReactDOM from "react-dom";
+import ReactDOM from "react-dom/client";
 import { Provider } from "react-redux";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import App from "./App";
@@ -8,16 +8,14 @@ import { Login } from "./pages/Login";
 import { Logout } from "./pages/Logout";
 import { ItemView } from "./pages/ItemView";
 import { FolderView } from "./pages/FolderView";
-import reportWebVitals from "./reportWebVitals";
 import { store } from "./store/store";
 import Memo from "./utils/memoization";
 import "./index.scss";
 import { Error404 } from "./pages/404Error";
 
-// Instantiate global memo object that can be passed to pages as needed.
-let memo = new Memo();
+const memo = new Memo();
 
-ReactDOM.render(
+ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <Provider store={store}>
     <BrowserRouter>
       <Routes>
@@ -34,11 +32,5 @@ ReactDOM.render(
         </Route>
       </Routes>
     </BrowserRouter>
-  </Provider>,
-  document.getElementById("root")
+  </Provider>
 );
-
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
-reportWebVitals();
